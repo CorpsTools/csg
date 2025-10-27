@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width" />
+		<title>Coversheet Generator (CSG)</title>
+	    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+		<link rel="stylesheet" type="text/css" href="https://bootswatch.com/5/pulse/bootstrap.min.css" />
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+		/>
+		<meta property="og:title" content="Coversheet Generator (CSG)" />
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content="https://csg.corps.tools" />
+		<meta property="og:image" content="./csg.png" />
+		<meta property="og:description" content="Generate coversheets for your assignments." />
+		<meta name="theme-color" content="#ffd700">
+		<link rel="manifest" href="./csg.webmanifest" />
+
+		<meta property="title" content="Coversheet Generator (CSG)" />
+		<meta property="description" content="Generate coversheets for your assignments." />
+		<meta name="twitter:card" content="summary_large_image">
+		<script src='https://cdn.jsdelivr.net/npm/pdf-lib/dist/pdf-lib.min.js'></script>
+		<script type="text/javascript" src="./CHANGELOG.js"></script>
+		<script type="text/javascript" data-corpstools-endorsement src="https://corps.tools/endorsement.js" data-position="bottom-left" defer></script>
+		<script
+			src="https://tracking.corps.tools/api/script.js"
+			data-site-id="3"
+			defer
+		></script>
+		
+		<link href="./_app/immutable/assets/3.Bozqrc2_.css" rel="stylesheet">
+		<link rel="modulepreload" href="./_app/immutable/entry/start.Cdfs4aIL.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/CN0jlqos.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/BAMqvfG7.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/BoJF_WJl.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/DuEJCVQo.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/ykXScSKW.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/BtDNo4TG.js">
+		<link rel="modulepreload" href="./_app/immutable/entry/app.BbwGslQM.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/DsnmJJEf.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/Bxskz_1_.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/DI_jBggA.js">
+		<link rel="modulepreload" href="./_app/immutable/nodes/0.BebNaEQ6.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/NLcE_ibu.js">
+		<link rel="modulepreload" href="./_app/immutable/nodes/3.C0I5EBqi.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/Brqd_A96.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/CHyMhQmI.js"><!--[--><link rel="icon" href="/csg/_app/immutable/assets/favicon.DrF2Cvww.ico"/><!--]-->
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents"><!--[--><!--[--><!----><!----><div class="container mt-5"><div class="card mb-3"><div class="card-header">FAQ</div> <div class="card-body"><p class="mb-1"><b>What is this?</b> A USMA-specific coversheet generator.</p> <p class="mb-1"><b>Who made this?</b> A cadet.</p> <p class="mb-1"><b>Where was this made?</b> A barracks room.</p> <p class="mb-1"><b>When was this made?</b> Around 01FEB2023.</p> <p class="mb-1"><b>Why was this made?</b> Coversheets suck.</p> <p class="mb-1"><b>How much does this site cost?</b> This site consumes $2 worth of server credit each month.</p> <p class="mb-1"><b>How was this made?</b> Svelte, Bootstrap and a B Weekend.</p></div></div> <div class="card mb-3"><div class="card-header">Help</div> <div class="card-body"><p class="text-center">Contact <a href="mailto:korbin.deary@westpoint.edu">korbin.deary@westpoint.edu</a> for any questions,
+				comments or concerns.</p> <div class="accordion accordion-flush" id="qaAccordion"><div class="accordion-item"><h2 class="accordion-header" id="flush-headingOne"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">Why are there links and page numbers at the top of the page when I try to print?</button></h2> <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#qaAccordion"><div class="accordion-body"><p class="mb-2">Firefox users may run into this issue. To remove the links and headers: On the
+								print dialog, click "More settings" then uncheck the "Print headers and footers"
+								checkbox.</p> <hr/> <div class="row"><div class="col svelte-1r7g8g9"><img class="w-100 svelte-1r7g8g9" src="/csg/_app/immutable/assets/firefox_headers_1._i-QFt1U.png"/></div> <div class="col svelte-1r7g8g9"><img class="w-100 svelte-1r7g8g9" src="/csg/_app/immutable/assets/firefox_headers_2.DBO7-7ED.png"/></div></div></div></div></div> <div class="accordion-item"><h2 class="accordion-header" id="flush-headingTwo"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">Why do my signatures move positions when I paste the coversheet into Word?</button></h2> <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#qaAccordion"><div class="accordion-body"><p class="mb-2">Unfortunately, this is an unfixable issue with Microsoft Word. However, the
+								signatures' positions can be easily fixed within Word. In Word: Right-click the
+								signature you would like to reposition, hover over "Wrap Text" then click "In
+								Front of Text". You will then be able to freely position the signature without it
+								affecting the text.</p> <hr/> <div class="row"><div class="col-md-4 offset-md-4"><img class="w-100" src="/csg/_app/immutable/assets/paste_images_1.CTajptL1.png"/></div></div></div></div></div></div></div></div> <div class="card"><div class="card-header">Changelog</div> <div class="card-body" id="changelog-body"><!--[--><div class="card mb-3"><div class="card-header fw-bold text-bg-dark"><!--[-->[NEW]<!--]--> 25SEP2025</div> <div class="card-body"><!--[--><p class="card-text mb-1"><span class="text-primary fw-bold">[#]</span> Updated UI. (split section and instructor back into two lines)</p><p class="card-text mb-1"><span class="text-primary fw-bold">[#]</span> Updated all courses.</p><p class="card-text mb-1"><span class="text-primary fw-bold">[#]</span> Higher resolution coversheets.</p><!--]--></div></div><div class="card mb-3"><div class="card-header fw-bold "><!--[!--><!--]--> 17SEP2025</div> <div class="card-body"><!--[--><p class="card-text mb-1"><span class="text-primary fw-bold">[#]</span> Updated coversheet to be IAW DAAW June 2025 standards. ("CDT" -> "CADET")</p><!--]--></div></div><div class="card mb-3"><div class="card-header fw-bold "><!--[!--><!--]--> 27AUG2025</div> <div class="card-body"><!--[--><p class="card-text mb-1"><span class="text-success fw-bold">[+]</span> Added CorpsCard advertisements IOT support CorpsTools and the Corps.</p><p class="card-text mb-1"><span class="text-primary fw-bold">[#]</span> Redesigned website</p><!--]--></div></div><div class="card mb-3"><div class="card-header fw-bold "><!--[!--><!--]--> 17AUG2025</div> <div class="card-body"><!--[--><p class="card-text mb-1"><span class="text-primary fw-bold">[#]</span> Updated coversheet to be IAW new DAAW June 2025 standards.</p><!--]--></div></div><div class="card mb-3"><div class="card-header fw-bold "><!--[!--><!--]--> 25APR2025</div> <div class="card-body"><!--[--><p class="card-text mb-1"><span class="text-primary fw-bold">[#]</span> Fixed cursor in text box resetting to front when typing in the middle of the text.</p><!--]--></div></div><div class="card mb-3"><div class="card-header fw-bold "><!--[!--><!--]--> 24FEB2025</div> <div class="card-body"><!--[--><p class="card-text mb-1"><span class="text-primary fw-bold">[#]</span> Fixed line spacing (1 -> 2) between certification statements ("I CERTIFY").</p><!--]--></div></div><div class="card mb-3"><div class="card-header fw-bold "><!--[!--><!--]--> 15JAN2025</div> <div class="card-body"><!--[--><p class="card-text mb-1"><span class="text-primary fw-bold">[#]</span> Fixed downloaded coversheet's file name</p><p class="card-text mb-1"><span class="text-success fw-bold">[+]</span> Added option to add date to signature block of coversheet</p><!--]--></div></div><div class="card mb-3"><div class="card-header fw-bold "><!--[!--><!--]--> 16SEP2024</div> <div class="card-body"><!--[--><p class="card-text mb-1"><span class="text-primary fw-bold">[#]</span> Fixed box showing up around signatures of clipboard images.</p><p class="card-text mb-1"><span class="text-success fw-bold">[+]</span> Added CorpsTools endorsement</p><!--]--></div></div><div class="card mb-3"><div class="card-header fw-bold "><!--[!--><!--]--> 12SEP2024</div> <div class="card-body"><!--[--><p class="card-text mb-1"><span class="text-primary fw-bold">[#]</span> Split "Save/Print" into "Download" and "Print" Buttons.</p><p class="card-text mb-1"><span class="text-success fw-bold">[+]</span> Added the "Clipboard (Image)" and "Clipboard (Text)". The image option may work better for your coversheet workflow.</p><p class="card-text mb-1"><span class="text-success fw-bold">[+]</span> New DAAW statement initialing options</p><!--]--></div></div><div class="card mb-3"><div class="card-header fw-bold "><!--[!--><!--]--> 20AUG2024</div> <div class="card-body"><!--[--><p class="card-text mb-1"><span class="text-primary fw-bold">[#]</span> Updated coversheet to be IAW new DAAW June 2024 standards.</p><!--]--></div></div><div class="card mb-3"><div class="card-header fw-bold "><!--[!--><!--]--> 20APR2024</div> <div class="card-body"><!--[--><p class="card-text mb-1"><span class="text-success fw-bold">[+]</span> Added PDF coversheet prepending</p><!--]--></div></div><div class="card mb-3"><div class="card-header fw-bold "><!--[!--><!--]--> 29OCT2023</div> <div class="card-body"><!--[--><p class="card-text mb-1"><span class="text-primary fw-bold">[#]</span> Fixed coversheet not properly pasting to Word document.</p><p class="card-text mb-1"><span class="text-success fw-bold">[+]</span> Added pasting images directly from your clipboard to the coversheet</p><!--]--></div></div><div class="card mb-3"><div class="card-header fw-bold "><!--[!--><!--]--> 29AUG2023</div> <div class="card-body"><!--[--><p class="card-text mb-1"><span class="text-primary fw-bold">[#]</span> Updated "By" to "BY" on the coversheet template. (Thank you JG A4 '27 for pointing this out)</p><p class="card-text mb-1"><span class="text-primary fw-bold">[#]</span> Fixed some issues with the "Cadets" field.</p><!--]--></div></div><div class="card mb-3"><div class="card-header fw-bold "><!--[!--><!--]--> 29AUG2023</div> <div class="card-body"><!--[--><p class="card-text mb-1"><span class="text-success fw-bold">[+]</span> Added DAAW and Citation Generator links</p><p class="card-text mb-1"><span class="text-primary fw-bold">[#]</span> Fixed some visual bugs</p><!--]--></div></div><div class="card mb-3"><div class="card-header fw-bold "><!--[!--><!--]--> 11AUG2023</div> <div class="card-body"><!--[--><p class="card-text mb-1"><span class="text-primary fw-bold">[#]</span> Updated coversheet template to be IAW new DAAW</p><!--]--></div></div><div class="card mb-3"><div class="card-header fw-bold "><!--[!--><!--]--> 13MAR2023</div> <div class="card-body"><!--[--><p class="card-text mb-1"><span class="text-primary fw-bold">[#]</span> Fixed coversheet date not updating sometimes</p><!--]--></div></div><div class="card mb-3"><div class="card-header fw-bold "><!--[!--><!--]--> 01MAR2023</div> <div class="card-body"><!--[--><p class="card-text mb-1"><span class="text-success fw-bold">[+]</span> Added this info page</p><p class="card-text mb-1"><span class="text-primary fw-bold">[#]</span> Fixed the 'OUR/WE and MY/I' pronouns on the coversheet</p><!--]--></div></div><div class="card "><div class="card-header fw-bold "><!--[!--><!--]--> 06FEB2023</div> <div class="card-body"><!--[--><p class="card-text mb-1"><span class="text-success fw-bold">[+]</span> The Coversheet Generator launched.</p><!--]--></div></div><!--]--></div></div></div><!----><!----><!----><!--]--> <!--[!--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_7qblci = {
+						base: new URL(".", location).pathname.slice(0, -1),
+						assets: "/csg"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("./_app/immutable/entry/start.Cdfs4aIL.js"),
+						import("./_app/immutable/entry/app.BbwGslQM.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 3],
+							data: [null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+	</body>
+</html>

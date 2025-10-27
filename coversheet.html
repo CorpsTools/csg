@@ -1,0 +1,467 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=utf-8" />
+<meta name=Generator content="Microsoft Word 15 (filtered)" />
+<title>Coversheet Generator</title>
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0in;
+	font-size:11.0pt;
+	font-family:"Times New Roman",serif;}
+@page WordSection1
+	{size:8.5in 11.0in;
+	margin:70.45pt 1.0in 22.9pt 1.0in;}
+div.WordSection1
+	{page:WordSection1;}
+-->
+
+html {
+	width: 100vw;
+	max-width: 100vw;
+	overflow-x: hidden;
+	height: 99vh;
+	margin: 0;
+}
+
+@media screen {
+
+::-webkit-scrollbar {
+	width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+	background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+	background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+	background: #555;
+}
+}
+
+.underlined {
+	text-decoration: underline;
+	white-space: pre;
+}
+
+.drag-img {
+	border: 1px solid black;
+	position: absolute;
+	transform: translate(0px, 0px);
+	user-select: none;
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+}
+
+.drag-img img {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+}
+
+.centere p {
+	<!-- display: inline-block; -->
+}
+
+.printing .drag-img {
+	border-color: transparent;
+	top: 0.6in;
+}
+
+@media print {
+	.drag-img {
+		border-color: transparent;
+		top: 0.6in;
+	}
+}
+
+</style>
+
+</head>
+
+<body lang=EN-US style='word-wrap:break-word'>
+	<div class=WordSection1 id="cshtml">
+
+	</div>
+
+<script src="https://unpkg.com/pdf-lib"></script>
+<script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
+<script src="https://unpkg.com/interactjs/dist/interact.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script type="text/javascript" src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
+	<script type="text/javascript">
+		let gotResponse = false;
+
+		const opt = {
+			margin:       [1, 1, 0, 1],
+			filename:     'coversheet.pdf',
+			image:        { type: 'jpeg', quality: 1 },
+			html2canvas:  { scale: 1 },
+			jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+		};
+
+		document.addEventListener('paste', async (e) => {
+			e.preventDefault();
+			const clipboardItems = typeof navigator?.clipboard?.read === 'function' ? await navigator.clipboard.read() : e.clipboardData.files;
+
+			for (const clipboardItem of clipboardItems) {
+				let blob;
+				if (clipboardItem.type && clipboardItem.type.startsWith('image/')) {
+					// For files from `e.clipboardData.files`.
+					blob = clipboardItem;
+					// Do something with the blob.
+				} else {
+					// For files from `navigator.clipboard.read()`.
+					const imageTypes = clipboardItem.types ? clipboardItem.types.filter(type => type.startsWith('image/')) : [];
+					for (const imageType of imageTypes) {
+						blob = await clipboardItem.getType(imageType);
+						// Do something with the blob.
+					}
+				}
+
+				if(blob) {
+					const base64 = await blobToBase64(blob);
+
+					window.postMessage({
+						custom: true,
+						image: base64
+					});
+				}
+			}
+		});
+
+		function blobToBase64(blob) {
+			return new Promise((resolve, _) => {
+				const reader = new FileReader();
+				reader.onloadend = () => resolve(reader.result);
+				reader.readAsDataURL(blob);
+			});
+		}
+
+		function updateCoversheetText(state) {
+			const SPACE_CHAR = ' ';
+			let csHTML = `
+<p class=MsoNormal style='line-height:14.0pt'><span style='font-size:12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:12.0pt'>UNITED STATES MILITARY ACADEMY</span></p>
+
+<p class=MsoNormal style='line-height:10.0pt'><span style='font-size:12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal style='line-height:10.0pt'><span style='font-size:12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal style='line-height:10.0pt'><span style='font-size:12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal style='line-height:11.4pt'><span style='font-size:12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:12.0pt'>${state.assignmentName}</span></p>
+
+<p class=MsoNormal style='line-height:10.0pt'><span style='font-size:12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal style='line-height:10.0pt'><span style='font-size:12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal style='line-height:10.0pt'><span style='font-size:12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal style='line-height:10.0pt'><span style='font-size:12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal style='line-height:15.2pt'><span style='font-size:12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:12.0pt'>${state.course}</span></p>
+
+<p class=MsoNormal style='line-height:13.8pt'><span style='font-size:12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:12.0pt'>${state.section}</span></p>
+
+<p class=MsoNormal style='line-height:13.8pt'><span style='font-size:12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:12.0pt'>${state.instructor}</span></p>
+
+<p class=MsoNormal style='line-height:10.0pt'><span style='font-size:12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal style='line-height:10.0pt'><span style='font-size:12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal style='line-height:10.0pt'><span style='font-size:12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal style='line-height:11.4pt'><span style='font-size:12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:12.0pt'>BY</span></p>
+
+<p class=MsoNormal style='line-height:13.8pt'><span style='font-size:12.0pt'>&nbsp;</span></p>
+
+${state.cadets.map(c => `<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:12.0pt'>${c}</span></p>`).join('\n')}
+
+<p class=MsoNormal style='line-height:13.8pt'><span style='font-size:12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:12.0pt'>WEST POINT, NEW YORK</span></p>
+
+<p class=MsoNormal style='line-height:13.8pt'><span style='font-size:12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:12.0pt'>${state.date}</span></p>
+
+<p class=MsoNormal style='line-height:10.0pt'><span style='font-size:12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal style='line-height:10.0pt'><span style='font-size:12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal style='line-height:10.0pt'><span style='font-size:12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal style='line-height:11.4pt'><span style='font-size:12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-size:12.0pt'><span class="underlined">${(
+	state.certificationOption === 'used' && state.initials.length ? state.initials.join(SPACE_CHAR).padEnd(5, SPACE_CHAR) : '_'
+).padEnd(5, SPACE_CHAR)}</span> ${state.pronoun} CERTIFY THAT ${state.pronoun} HAVE COMPLETELY DOCUMENTED ALL SOURCES THAT ${state.pronoun} USED TO COMPLETE THIS ASSIGNMENT AND
+THAT ${state.pronoun} ACKNOWLEDGED ALL ASSISTANCE ${state.pronoun} RECEIVED IN THE COMPLETION OF THIS
+ASSIGNMENT.</span></p>
+
+<p class=MsoNormal style='line-height:9.3pt'><span style='font-size:12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-size:12.0pt'><span class="underlined">${(
+	state.certificationOption === 'unused' && state.initials.length ? state.initials.join(SPACE_CHAR) : '_'
+).padEnd(5, SPACE_CHAR)}</span> ${state.pronoun} CERTIFY THAT ${state.pronoun} DID
+NOT USE ANY SOURCES OR RECEIVE ANY ASSISTANCE REQUIRING DOCUMENTATION
+WHILE COMPLETING THIS ASSIGNMENT.</span></p>
+
+<p class=MsoNormal style='line-height:9.3pt'><span style='font-size:12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-size:12.0pt'>AND:</span></p>
+
+<p class=MsoNormal style='line-height:11.3pt'><span style='font-size:12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-size:12.0pt'><span class="underlined">${(
+	state.aiCertificationOption === 'used' && state.initials.length ? state.initials.join(SPACE_CHAR) : '_'
+).padEnd(5, SPACE_CHAR)}</span> ${state.pronoun} ACKNOWLEDGE THAT ${state.pronoun}
+USED GENERATIVE AI TO COMPLETE THIS ASSIGNMENT.</span></p>
+
+<p class=MsoNormal style='line-height:9.7pt'><span style='font-size:12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-size:12.0pt'><span class="underlined">${(
+	state.aiCertificationOption === 'unused' && state.initials.length ? state.initials.join(SPACE_CHAR) : '_'
+).padEnd(5, SPACE_CHAR)}</span> ${state.pronoun} ACKNOWLEDGE THAT ${state.pronoun} DID
+NOT USE GENERATIVE AI TO COMPLETE THIS ASSIGNMENT.</span></p>
+
+<p class=MsoNormal style='line-height:10.0pt'><span style='font-size:12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal style='line-height:17.25pt'><span style='font-size:12.0pt'>&nbsp;</span></p>
+
+${state.cadets.map(c => `<p class=MsoNormal><span style='font-size:12.0pt'>SIGNATURE:______________________________________DATE:<span class="underlined"> ${state.shouldAddSignatureDate ? state.date.padEnd(16, SPACE_CHAR) : '_' + SPACE_CHAR.repeat(16)}</span></span></p>`).join('\n')}
+
+<p class=MsoNormal><span style='font-size:12.0pt'>${state.endText}</span></p>
+			`;
+
+			document.querySelector('#cshtml').innerHTML = csHTML;
+		}
+
+		window.addEventListener("message", async (event) => {
+			if(typeof event.data !== 'object' || !event.data.custom) return;
+
+			if(event.data.copyToClipboard) {
+				selectText('body');
+				document.execCommand('copy');
+				setTimeout(() => {
+					clearSelection();
+				}, 10);
+				function clearSelection(){
+					if (window.getSelection) {window.getSelection().removeAllRanges();}
+					else if (document.selection) {document.selection.empty();}
+				}
+				function selectText(selector) {
+					const node = document.querySelector(selector);
+
+					if (document.body.createTextRange) {
+						const range = document.body.createTextRange();
+						range.moveToElementText(node);
+						range.select();
+					} else if (window.getSelection) {
+						const selection = window.getSelection();
+						const range = document.createRange();
+						range.selectNodeContents(node);
+						selection.removeAllRanges();
+						selection.addRange(range);
+					} else {
+						console.warn("Could not select text in node: Unsupported browser.");
+					}
+				}
+			} else if(event.data.getCoversheetImage) {
+				document.body.scrollTop = 0;
+				document.body.classList.add('printing');
+				let data = await html2pdf().set({
+					margin:       [1, 1, 1, 1],
+					image:        { type: 'png', quality: 1 },
+					html2canvas:  { scale: 3 },
+					jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+				}).from(document.body).outputImg('datauristring');
+
+				document.body.classList.remove('printing');
+				let blob = dataURItoBlob(data);
+				// console.log(data, blob);
+				event.target.postMessage({
+					custom: true,
+					return_image: blob
+				});
+			} else if(event.data.image) {
+				const div = document.createElement("div");
+				const randomClass = "drag" + Math.random().toString().slice(3);
+
+				const loadedImage = await base64ImageDataToImage(event.data.image);
+				div.style.width = `${loadedImage.width}px`;
+				div.style.height = `${loadedImage.height}px`;
+
+				div.innerHTML = `<img src="${event.data.image}" />`;
+				document.body.prepend(div);
+				div.style.position = "fixed";
+				// div.style.top = '50px';
+				// div.style.left = '100px';
+				div.classList.add(randomClass);
+				div.classList.add('drag-img');
+
+				div.oncontextmenu = event => {
+					div.remove();
+					event.preventDefault();
+				};
+				
+				interact(`.${randomClass}`)
+					.resizable({
+						// resize from all edges and corners
+						edges: { left: true, right: true, bottom: true, top: true },
+
+						listeners: {
+							move (event) {
+								let target = event.target
+								let x = (parseFloat(target.getAttribute('data-x')) || 0)
+								let y = (parseFloat(target.getAttribute('data-y')) || 0)
+
+								// update the element's style
+								target.style.width = event.rect.width + 'px';
+								target.style.height = event.rect.height + 'px';
+
+								// translate when resizing from top or left edges
+								target.style.transform = 'translate(' + x + 'px,' + y + 'px)'
+
+								target.setAttribute('data-x', x);
+								target.setAttribute('data-y', y);
+							}
+						},
+						modifiers: [
+							// keep the edges inside the parent
+							// interact.modifiers.restrictEdges({
+							// 	outer: 'parent'
+							// }),
+
+							// minimum size
+							interact.modifiers.restrictSize({
+								min: { width: 25, height: 25 }
+							})
+						]
+					})
+					.draggable({
+						listeners: { move: dragMoveListener },
+						modifiers: [
+							// interact.modifiers.restrictRect({
+							// 	restriction: 'parent',
+							// 	endOnly: true
+							// })
+						]
+					})
+			} else if(event.data.getPDF) {
+				document.body.scrollTop = 0;
+				(async () => {
+					// New Promise-based usage:
+					document.body.classList.add('printing');
+					event.target.postMessage({
+						custom: true,
+						pdf: await html2pdf().set(opt).from(document.body).output('blob')
+					});
+					document.body.classList.remove('printing');
+				})();
+			} else if(event.data.state) {
+				updateCoversheetText(event.data.state);
+				gotResponse = true;
+			}
+		});
+		function dragMoveListener (event) {
+			let target = event.target
+			// keep the dragged position in the data-x/data-y attributes
+			let x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx
+			let y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy
+
+			// translate the element
+			target.style.transform = 'translate(' + x + 'px, ' + y + 'px)'
+
+			// update the posiion attributes
+			target.setAttribute('data-x', x)
+			target.setAttribute('data-y', y)
+		}
+
+		function base64ImageDataToImage(base64) {
+			return new Promise(resolve => {
+				const image = new Image();
+
+				image.onload = () => {
+					resolve(image);
+				};
+
+				image.src = base64;
+			});
+		}
+
+		function dataURItoBlob(dataURI) {
+			// convert base64 to raw binary data held in a string
+			// doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
+			const byteString = atob(dataURI.split(',')[1]);
+
+			// separate out the mime component
+			const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
+
+			// write the bytes of the string to an ArrayBuffer
+			const ab = new ArrayBuffer(byteString.length);
+
+			// create a view into the buffer
+			let ia = new Uint8Array(ab);
+
+			// set the bytes of the buffer to the correct values
+			for (let i = 0; i < byteString.length; i++) {
+				ia[i] = byteString.charCodeAt(i);
+			}
+
+			// write the ArrayBuffer to a blob, and you're done
+			const blob = new Blob([ab], {type: mimeString});
+			return blob;
+		}
+
+		let readyInterval;
+		readyInterval = setInterval(() => {
+			window.parent.postMessage({
+				custom: true,
+				csReady: true
+			});
+
+			if(gotResponse) {
+				clearInterval(readyInterval);
+			}
+		}, 500);
+	</script>
+</body>
+
+</html>
