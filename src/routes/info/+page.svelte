@@ -4,6 +4,10 @@
 	import { persistentStore } from '../../stores/persistentStore.js';
 	import CHANGELOG from '../CHANGELOG.js';
 
+	import HelpImage1 from '$lib/assets/help_images/firefox_headers_1.png';
+	import HelpImage2 from '$lib/assets/help_images/firefox_headers_2.png';
+	import HelpImage3 from '$lib/assets/help_images/paste_images_1.png';
+
 	const TYPE_COLOR = { '+': 'success', '#': 'primary', '-': 'danger' };
 
 	const lastChangelogHash = persistentStore('lastChangelogHash', 'none');
@@ -91,10 +95,10 @@
 							<hr />
 							<div class="row">
 								<div class="col">
-									<img class="w-100" src="/help_images/firefox_headers_1.png" />
+									<img class="w-100" src={HelpImage1} />
 								</div>
 								<div class="col">
-									<img class="w-100" src="/help_images/firefox_headers_2.png" />
+									<img class="w-100" src={HelpImage2} />
 								</div>
 							</div>
 						</div>
@@ -132,7 +136,7 @@
 							<hr />
 							<div class="row">
 								<div class="col-md-4 offset-md-4">
-									<img class="w-100" src="/help_images/paste_images_1.png" />
+									<img class="w-100" src={HelpImage3} />
 								</div>
 							</div>
 						</div>

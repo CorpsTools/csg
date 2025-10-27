@@ -1,5 +1,7 @@
 <script>
 	import { onMount, afterUpdate, beforeUpdate, tick } from 'svelte';
+	import { base } from '$app/paths';
+
 	import SignaturePad from 'signature_pad';
 	// import { PDFDocument } from 'pdf-lib';
 	// import html2pdf from 'html2pdf.js';
@@ -9,6 +11,8 @@
 	import { COURSE_NAMES } from '../courses.js';
 	import CHANGELOG from './CHANGELOG.js';
 	import { persistentStore } from '../stores/persistentStore.js';
+
+	import logo from '$lib/assets/csg_long.svg';
 
 	const lastChangelogHash = persistentStore('lastChangelogHash', 'none');
 	const CHANGELOG_HASH = (JSON.stringify(CHANGELOG).split('').reduce((a, v) => a + v.charCodeAt(0), 0) % 2 ** 16).toString(36);
@@ -533,11 +537,11 @@
 <div class="container mt-4">
 	<div class="row">
 		<div class="col-md-8">
-			<img class="logo d-block mx-auto" src="/csg_long.svg" />
+			<img class="logo d-block mx-auto" src={logo} />
 			<hr class="mb-2" />
 			<p class="text-center mb-2 mt-0">
 				<span class="{isNewUpdate ? 'animate__animated animate__flash animate__infinite' : ''}" on:click={() => isNewUpdate = false}>
-					<a class="text-secondary w-100" href="/info" target="_blank">Info / Help / Changelog</a>
+					<a class="text-secondary w-100" href="{base}/info" target="_blank">Info / Help / Changelog</a>
 				</span>
 				<span class="text-primary"> • </span>
 				<a class="text-secondary w-100" href="https://usarmywestpoint.sharepoint.com/sites/g5.publications/publications/DOCUMENTATION%20AND%20ACKNOWLEDGMENT%20OF%20ACADEMIC%20WORK.pdf" target="_blank">DAAW PDF</a>

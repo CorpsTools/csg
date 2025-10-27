@@ -1,8 +1,9 @@
 <script>
 	import { onMount } from 'svelte';
+	import { base } from '$app/paths';
 
 	let coversheetFrame;
-	let coversheetPath = "/coversheet.html?" + Math.random().toString(36).slice(2);
+	let coversheetPath = base + "/coversheet.html?" + Math.random().toString(36).slice(2);
 
 	onMount(() => {
 		if(onLoaded) {
