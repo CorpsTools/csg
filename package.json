@@ -4,6 +4,8 @@
 	"version": "0.0.1",
 	"type": "module",
 	"scripts": {
+		"preci": "rm -rf node_modules",
+    	"ci": "yarn install --frozen-lockfile",
 		"dev": "vite dev",
 		"build": "vite build",
 		"preview": "vite preview",
