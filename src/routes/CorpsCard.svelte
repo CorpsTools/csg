@@ -1,6 +1,8 @@
 <script>
 	import { onMount } from 'svelte';
 	import ADVERTISEMENTS from './ADVERTISEMENTS.js';
+	import { base } from '$app/paths';
+
 	let shuffledAds = [];
 
 	onMount(() => {
@@ -129,7 +131,7 @@
 			{#each shuffledAds as ad, index}
 				<div class="{'carousel-item' + (index === 0 ? ' active' : '')}">
 					<a href={ad.actionLink} target="_blank" data-bs-toggle="{ad.isPlaceholder ? 'modal' : ''}" data-bs-target="{ad.isPlaceholder ? '#adInfoModal' : ''}">
-						<img src={ad.imageURL} class="d-block w-100">
+						<img src="{base + ad.imageURL}" class="d-block w-100">
 					</a>
 					<div class="carousel-caption d-none d-md-block">
 						<p class="m-0" style="pointer-events: auto;">{ad.emailPOC}</p>
