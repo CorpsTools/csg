@@ -7,8 +7,7 @@ const config = {
 	kit: {
 		adapter: adapter(),
 		paths: {
-			// 👇 Only set this for production builds (GitHub Pages)
-			base: dev ? '' : '/csg'
+			base: ''
 		},
 	}
 };
