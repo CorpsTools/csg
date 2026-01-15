@@ -164,7 +164,7 @@
 						{#each parseChanges(entry.changes) as change}
 							<p class="card-text mb-1">
 								<span class="text-{TYPE_COLOR[change.type]} fw-bold">[{change.type}]</span>
-								{change.text}
+								{@html change.text}
 							</p>
 						{/each}
 					</div>

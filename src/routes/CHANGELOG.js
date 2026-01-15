@@ -1,5 +1,11 @@
 export default [
 	{
+		date: "15JAN2026",
+		changes: `
++ The Coversheet Generator is now open-source! You submit issues and pull requests here: <a href="https://github.com/CorpsTools/csg" target="_blank">https://github.com/CorpsTools/csg</a>
+`
+	},
+	{
 		date: "11DEC2025",
 		changes: `
 # The "Cadet Names" textbox now allows C numbers and other custom formats. (thank you CDT Michael Belcher, CO D2, '26 for the idea.)

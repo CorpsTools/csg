@@ -558,6 +558,8 @@
 					<a class="text-secondary w-100" href="{base}/info" target="_blank">Info / Help / Changelog</a>
 				</span>
 				<span class="text-primary"> • </span>
+				<a class="text-secondary w-100" href="https://github.com/CorpsTools/csg" target="_blank">GitHub Source</a>
+				<span class="text-primary"> • </span>
 				<a class="text-secondary w-100" href="https://usarmywestpoint.sharepoint.com/sites/g5.publications/publications/DOCUMENTATION%20AND%20ACKNOWLEDGMENT%20OF%20ACADEMIC%20WORK.pdf" target="_blank">DAAW PDF</a>
 				<span class="text-primary"> • </span>
 				<a class="text-secondary w-100" href="https://citethedaw.netlify.app/" target="_blank">Citation Generator</a>
