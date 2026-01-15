@@ -573,7 +573,7 @@
 			</div>
 		</div>
 		<div class="col-md-4">
-			<CorpsCard />
+			<!-- <CorpsCard /> -->
 			<div class="card wrapper-card">
 				<div class="card-body">
 					<div class="mb-1">
