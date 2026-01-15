@@ -1,5 +1,11 @@
 export default [
 	{
+		date: "11DEC2025",
+		changes: `
+# The "Cadet Names" textbox now allows C numbers and other custom formats. (thank you CDT Michael Belcher, CO D2, '26 for the idea.)
+`
+	},
+	{
 		date: "25SEP2025",
 		changes: `
 # Updated UI. (split section and instructor back into two lines)

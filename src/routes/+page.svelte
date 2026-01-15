@@ -142,34 +142,48 @@
 		let dateString = `${dateObj.getDate()} ${dateObj.toLocaleString('default', { month: 'long' }).toUpperCase()} ${dateObj.getFullYear()}`;
 
 		cadetsErrorText = "";
-		const amountOfCadets = cadets.trim().split('\n').filter(a => a).length;
-		parsedCadets = amountOfCadets === 0 ? [] : cadets.split("\n").map((line, idx) => {
-			try {
-				let splitLine = line.trim().split(' ');
-				let company = splitLine[splitLine.length - 1];
-				let year = Number((splitLine[splitLine.length - 2] || '').replace(/\D/g, ''));
-				let name = splitLine.slice(0, -2).join(" ");
+		const cadetLines = cadets.split("\n").map(line => line.trim()).filter(line => line);
+		parsedCadets = cadetLines.length === 0 ? [] : cadetLines.map((line) => {
+			const splitLine = line.split(/\s+/);
+			const company = splitLine[splitLine.length - 1];
+			const yearToken = splitLine[splitLine.length - 2];
+			const nameParts = splitLine.slice(0, -2);
+			const yearDigits = yearToken ? yearToken.match(/\d+/) : null;
+			const yearNumber = yearDigits ? Number(yearDigits[0]) : NaN;
+			const isCompany = typeof company === 'string' && /^[A-Z][0-9]/i.test(company);
+			const hasName = nameParts.length > 0;
+			const hasYear = !Number.isNaN(yearNumber);
 
-				if(isNaN(year)) year = "XX";
-				if(isNaN(Number(company[1]))) company = "XX";
-				if(splitLine.length < 4) name = line;
-
-				return [name, String(year), company];
-			} catch(e) {
-				// console.error(e);
-				cadetsErrorText = "Invalid entry on line " + (idx + 1);
-				return ["John Doe", "26", "F4"];
+			if (hasName && hasYear && isCompany) {
+				return {
+					raw: line,
+					name: nameParts.join(" "),
+					year: String(yearNumber),
+					company,
+					structured: true
+				};
 			}
-		});
-		const cadetNames = parsedCadets.map(c => {
-			let arr = c[0].split(' ').filter(c => c);
-			return arr;
-		});
-		cadetLastName = parsedCadets[0] ? parsedCadets[0][0].split(" ")[1] : "LastName";
 
-		const cadetsText = parsedCadets.map((cadet, idx) => `CADET ${cadet[0].toUpperCase()} ‘${cadet[1].toUpperCase()}, CO ${cadet[2].toUpperCase()}`);
-		const initials = cadetNames.map(cadet => cadet.length >= 2 ? `${cadet[0][0].toUpperCase()}${cadet[1][0].toUpperCase()}` : '');
-		const pronoun = cadetNames.length > 1 ? "WE" : "I";
+			return {
+				raw: line,
+				name: line,
+				year: "",
+				company: "",
+				structured: false
+			};
+		});
+		const firstStructured = parsedCadets.find(c => c.structured);
+		const cadetNameForFile = firstStructured ? firstStructured.name : (parsedCadets[0]?.name || "");
+		const namePartsForFile = cadetNameForFile.trim().split(/\s+/).filter(c => c);
+		cadetLastName = namePartsForFile.length ? namePartsForFile[namePartsForFile.length - 1] : "LastName";
+
+		const cadetsText = parsedCadets.map((cadet) => cadet.structured ? `CADET ${cadet.name.toUpperCase()} ‘${cadet.year.toUpperCase()}, CO ${cadet.company.toUpperCase()}` : cadet.raw);
+		const initials = parsedCadets.map(cadet => {
+			if(!cadet.structured) return '';
+			const nameParts = cadet.name.trim().split(/\s+/);
+			return nameParts.length >= 2 ? `${nameParts[0][0].toUpperCase()}${nameParts[1][0].toUpperCase()}` : '';
+		});
+		const pronoun = parsedCadets.length > 1 ? "WE" : "I";
 
 		coversheetFrame.postMessage({
 			custom: true,
@@ -593,7 +607,16 @@
 					<hr />
 					<div class="mb-2">
 						<label for="cadetsInput" class="form-label">Cadets <small class="text-muted">[Full Name] [Year] [Company]</small></label>
-						<textarea class="form-control" id="cadetsInput" bind:value={cadets} on:keydown={upperCaseHandler} on:keyup={upperCaseHandler} placeholder="John Doe 26 I1
+						<textarea
+							class="form-control"
+							id="cadetsInput"
+							bind:value={cadets}
+							on:keydown={upperCaseHandler}
+							on:keyup={upperCaseHandler}
+							data-bs-toggle="tooltip"
+							data-bs-trigger="focus"
+							data-bs-title="Enter '[Full Name] [Year] [Company]' to auto-format, or type any custom line to place it directly on the coversheet."
+							placeholder="John Doe 26 I1
 Jane Roe 26 D2"></textarea>
 						<!-- <p class="text-danger">{cadetsErrorText}</p> -->
 					</div>
