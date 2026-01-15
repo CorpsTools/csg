@@ -550,8 +550,8 @@
 
 <div class="container mt-4">
 	<div class="row">
+		<img class="logo d-block mx-auto mb-2" src={logo} />
 		<div class="col-md-8">
-			<img class="logo d-block mx-auto" src={logo} />
 			<hr class="mb-2" />
 			<p class="text-center mb-2 mt-0">
 				<span class="{isNewUpdate ? 'animate__animated animate__flash animate__infinite' : ''}" on:click={() => isNewUpdate = false}>
@@ -574,7 +574,7 @@
 		</div>
 		<div class="col-md-4">
 			<!-- <CorpsCard /> -->
-			<div class="card wrapper-card">
+			<div class="card wrapper-card mt-3">
 				<div class="card-body">
 					<div class="mb-1">
 						<AutoComplete items={COURSE_NAMES} bind:text={courseName} maxItemsToShowInList={6} placeholder="Course Name">
