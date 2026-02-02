@@ -2,6 +2,13 @@ export default [
 	{
 		date: "15JAN2026",
 		changes: `
++ Added a "Place under Title" option for placing the End Text under the title.
++ Added a smart autofill feature that remembers your sections and instructors based off of your course.
+`
+	},
+	{
+		date: "15JAN2026",
+		changes: `
 + The Coversheet Generator is now open-source! You submit issues and pull requests here: <a href="https://github.com/CorpsTools/csg" target="_blank">https://github.com/CorpsTools/csg</a>
 `
 	},

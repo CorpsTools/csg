@@ -50,7 +50,7 @@
 			<p class="mb-1"><b>When was this made?</b> Around 01FEB2023.</p>
 			<p class="mb-1"><b>Why was this made?</b> Coversheets suck.</p>
 			<p class="mb-1">
-				<b>How much does this site cost?</b> This site consumes $2 worth of server credit each month.
+				<b>How much does this site cost?</b> This site is hosted for free on GitHub Pages.
 			</p>
 			<p class="mb-1"><b>How was this made?</b> Svelte, Bootstrap and a B Weekend.</p>
 		</div>

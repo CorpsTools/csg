@@ -172,6 +172,8 @@ style='font-size:12.0pt'>UNITED STATES MILITARY ACADEMY</span></p>
 <p class=MsoNormal align=center style='text-align:center'><span
 style='font-size:12.0pt'>${state.assignmentName}</span></p>
 
+${!state.endTextPositionUnderTitle ? `` : `<p class=MsoNormal align=center style='text-align:center'><span style='font-size:12.0pt'>${state.endText}</span></p>`}
+
 <p class=MsoNormal style='line-height:10.0pt'><span style='font-size:12.0pt'>&nbsp;</span></p>
 
 <p class=MsoNormal style='line-height:10.0pt'><span style='font-size:12.0pt'>&nbsp;</span></p>
@@ -267,7 +269,7 @@ NOT USE GENERATIVE AI TO COMPLETE THIS ASSIGNMENT.</span></p>
 
 ${state.cadets.map(c => `<p class=MsoNormal><span style='font-size:12.0pt'>SIGNATURE:______________________________________DATE:<span class="underlined"> ${state.shouldAddSignatureDate ? state.date.padEnd(16, SPACE_CHAR) : '_' + SPACE_CHAR.repeat(16)}</span></span></p>`).join('\n')}
 
-<p class=MsoNormal><span style='font-size:12.0pt'>${state.endText}</span></p>
+${state.endTextPositionUnderTitle ? `` : `<p class=MsoNormal><span style='font-size:12.0pt'>${state.endText}</span></p>`}
 			`;
 
 			document.querySelector('#cshtml').innerHTML = csHTML;

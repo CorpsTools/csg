@@ -35,6 +35,8 @@
 	let showingSuccessfulCopyText = false;
 	let showingSuccessfulCopyImage = false;
 	let pronoun = "I";
+	const COVERSHEET_STORAGE_KEY = "CSG_COVERSHEET_COURSE_MAP";
+	let courseAutofillHint = "";
 
 	// Form vars
 	let assignmentName = "";
@@ -44,6 +46,7 @@
 	let cadets = "";
 	let assignmentDate = "";
 	let shouldAddSignatureDate = true;
+	let endTextPositionUnderTitle = false;
 	let endText = "";
 	let certificationOption = "used";
 	let aiCertificationOption = "unused";
@@ -94,6 +97,51 @@
 	}
 
 	const capitalize = s => s && s[0].toUpperCase() + s.slice(1);
+	const getCourseIdFromName = (name) => (name || "").split(":")[0].trim().toUpperCase();
+
+	function loadCoversheetCourseMap() {
+		const raw = localStorage.getItem(COVERSHEET_STORAGE_KEY);
+		if (!raw) return {};
+		try {
+			return JSON.parse(raw);
+		} catch (error) {
+			console.warn("Failed to parse coversheet course map.", error);
+			return {};
+		}
+	}
+
+	function saveCoversheetCourseMap(map) {
+		localStorage.setItem(COVERSHEET_STORAGE_KEY, JSON.stringify(map));
+	}
+
+	function storeCoversheetByCourse() {
+		const courseId = getCourseIdFromName(courseName);
+		if (!courseId) return;
+		const map = loadCoversheetCourseMap();
+		map[courseId] = {
+			assignmentName: assignmentName || "",
+			section: section || "",
+			instructor: instructor || "",
+			cadets: cadets || ""
+		};
+		saveCoversheetCourseMap(map);
+	}
+
+	function applyCourseDefaultsFromStore() {
+		const courseId = getCourseIdFromName(courseName);
+		if (!courseId) return;
+		const map = loadCoversheetCourseMap();
+		const stored = map[courseId];
+		if (!stored) return;
+		assignmentName = (stored.assignmentName || "").toUpperCase();
+		section = (stored.section || "").toUpperCase();
+		instructor = (stored.instructor || "").toUpperCase();
+		cadets = (stored.cadets || "").toUpperCase();
+		courseAutofillHint = `Loaded saved defaults for ${courseId}`;
+		setTimeout(() => {
+			courseAutofillHint = "";
+		}, 1500);
+	}
 
 	$: if(sigPadCanvas) {
 		if(!signaturePad) {
@@ -115,6 +163,7 @@
 		instructor;
 		cadets;
 		shouldAddSignatureDate;
+		endTextPositionUnderTitle;
 		certificationOption;
 		aiCertificationOption;
 		endText = endText.toUpperCase();
@@ -198,6 +247,7 @@
 				certificationOption: certificationOption,
 				aiCertificationOption: aiCertificationOption,
 				shouldAddSignatureDate: shouldAddSignatureDate,
+				endTextPositionUnderTitle: endTextPositionUnderTitle,
 				initials: initials,
 				endText: endText.trim()
 			}
@@ -244,10 +294,12 @@
 	}
 
 	function prependPDFClick() {
+		storeCoversheetByCourse();
 		prependPDFFileInputElem.click();
 	}
 
 	async function downloadCoversheet() {
+		storeCoversheetByCourse();
 		const pdfFile = await getCoversheetPDF();
 		const url = URL.createObjectURL(pdfFile);
 		downloadURI(url, generateFileName() + '.cover.pdf');
@@ -285,6 +337,7 @@
 	}
 
 	async function copyHTMLToClipboard() {
+		storeCoversheetByCourse();
 		coversheetFrame.postMessage({
 			custom: true,
 			copyToClipboard: true
@@ -297,6 +350,7 @@
 	}
 
 	async function copyImageToClipboard() {
+		storeCoversheetByCourse();
 		const imageBlob = await getCoversheetImage();
 		try {
 			navigator.clipboard.write([
@@ -428,6 +482,7 @@
 	}
 
 	function showPrintDialog() {
+		storeCoversheetByCourse();
 		document.title = generateFileName() + '.cover';
 		coversheetFrame.print();
 		document.title = "Coversheet Generator (CSG)";
@@ -448,6 +503,10 @@
 		}
 
 		return JSON.parse(item);
+	}
+
+	function handleCourseBlur() {
+		applyCourseDefaultsFromStore();
 	}
 </script>
 
@@ -546,6 +605,32 @@
 	.logo {
 		width: 50%;
 	}
+
+	.course-input-wrap {
+		position: relative;
+	}
+
+	.course-autofill-hint {
+		position: absolute;
+		top: -10px;
+		right: 0;
+		transform: translateY(-100%);
+		background: #1f2937;
+		color: #fff;
+		font-size: 0.75rem;
+		padding: 0.2rem 0.45rem;
+		border-radius: 6px;
+		box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+		pointer-events: none;
+		z-index: 5;
+		opacity: 0;
+		transition: opacity 120ms ease;
+		white-space: nowrap;
+	}
+
+	.course-autofill-hint.show {
+		opacity: 1;
+	}
 </style>
 
 <div class="container mt-4">
@@ -576,8 +661,8 @@
 			<!-- <CorpsCard /> -->
 			<div class="card wrapper-card mt-3">
 				<div class="card-body">
-					<div class="mb-1">
-						<AutoComplete items={COURSE_NAMES} bind:text={courseName} maxItemsToShowInList={6} placeholder="Course Name">
+					<div class="mb-1 course-input-wrap">
+						<AutoComplete items={COURSE_NAMES} bind:text={courseName} maxItemsToShowInList={6} placeholder="Course Name" onBlur={handleCourseBlur}>
 							<div slot="dropdown-footer" let:nbItems let:maxItemsToShowInList>
 								<hr class="dropdown-divider">
 								{#if nbItems - maxItemsToShowInList > 0}
@@ -585,6 +670,7 @@
 								{/if}
 							</div>
 						</AutoComplete>
+						<div class={`course-autofill-hint ${courseAutofillHint ? 'show' : ''}`}>{courseAutofillHint}</div>
 					</div>
 					<div class="input-group mb-1">
 						<span class="input-group-text" id="assignmentNameInput">Assignment</span>
@@ -623,7 +709,19 @@ Jane Roe 26 D2"></textarea>
 						<!-- <p class="text-danger">{cadetsErrorText}</p> -->
 					</div>
 					<div class="">
-						<label for="endTextInput" class="form-label">End Text</label>
+						<div class="row">
+							<div class="col">
+								<label for="endTextInput" class="form-label">End Text</label>
+							</div>
+							<div class="col">
+								<div class="form-check">
+									<input class="form-check-input" type="checkbox" bind:checked={endTextPositionUnderTitle} id="endTextPosition">
+									<label class="form-check-label" for="endTextPosition">
+										Place under Title?
+									</label>
+								</div>
+							</div>
+						</div>
 						<textarea class="form-control" id="endTextInput" bind:value={endText} on:keydown={upperCaseHandler} on:keyup={upperCaseHandler} placeholder="WORD COUNT: 9999"></textarea>
 					</div>
 					<div class="mt-2">
