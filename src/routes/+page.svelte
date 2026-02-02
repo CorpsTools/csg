@@ -119,7 +119,6 @@
 		if (!courseId) return;
 		const map = loadCoversheetCourseMap();
 		map[courseId] = {
-			assignmentName: assignmentName || "",
 			section: section || "",
 			instructor: instructor || "",
 			cadets: cadets || ""
@@ -133,7 +132,6 @@
 		const map = loadCoversheetCourseMap();
 		const stored = map[courseId];
 		if (!stored) return;
-		assignmentName = (stored.assignmentName || "").toUpperCase();
 		section = (stored.section || "").toUpperCase();
 		instructor = (stored.instructor || "").toUpperCase();
 		cadets = (stored.cadets || "").toUpperCase();
