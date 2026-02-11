@@ -12,6 +12,12 @@
       month: 2,
       day: 2,
       script: `${BASE_PATH}/events/groundhog_day/groundhog.js`
+    },
+    {
+      id: "valentines",
+      month: 2,
+      day: 14,
+      script: `${BASE_PATH}/events/valentines/valentines.js`
     }
   ];
 

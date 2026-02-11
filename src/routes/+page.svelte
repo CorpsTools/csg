@@ -600,7 +600,7 @@
 			src={logo}
 			alt="Coversheet Generator Logo"
 		/>
-		<div class="col-md-8">
+		<div class="col-md-8" id="linksSection">
 			<hr class="mb-2" />
 			<p class="text-center mb-2 mt-0">
 				<span
