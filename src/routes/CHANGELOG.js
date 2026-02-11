@@ -1,5 +1,12 @@
 export default [
 	{
+		date: "10FEB2026",
+		changes: `
+# Fixed some accessibility issues.
+# Fixed issue with not being able to edit textboxes properly.
+`
+	},
+	{
 		date: "15JAN2026",
 		changes: `
 + Added a "Place under Title" option for placing the End Text under the title.
