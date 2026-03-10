@@ -59,7 +59,7 @@
 
 	.info-button {
 		position: absolute;
-		top: -23px;
+		bottom: -23px;
 		left: 0px;
 /*		width: 130px;*/
 		height: 20px;
@@ -167,8 +167,8 @@
 					Please review the following requirements before submitting:
 				</p>
 				<ul class="list-group list-group-flush">
-					<li class="list-group-item"><strong>Cost:</strong> $5 minimum per advertisement (pay as much as you want, just has to be at least five dollars.)</li>
-					<li class="list-group-item"><strong>Duration:</strong> Ads can remain live for up to <strong>7 days</strong></li>
+					<li class="list-group-item"><strong>Cost:</strong> $1 a week minimum per advertisement-</li>
+					<li class="list-group-item"><strong>Duration:</strong> Ads can remain live for the whole semester.</li>
 					<li class="list-group-item"><strong>Proceeds:</strong> All proceeds go to the continuation of <em>CorpsTools</em>, our parent organization</li>
 					<li class="list-group-item"><strong>Content:</strong> Advertisements must be professional, respectful, and related to USMA</li>
 					<li class="list-group-item"><strong>Images:</strong> Ad pictures must be in a <strong>3:1 ratio</strong> with a minimum resolution of <strong>600x200</strong></li>

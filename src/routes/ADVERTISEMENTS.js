@@ -16,10 +16,18 @@ export default [
 	// 	isPlaceholder: true
 	// },
 	{
+		emailPOC: "salar.sheriff@westpoint.edu",
+		imageURL: "/ads/salar.sheriff.png",
+		startDate: new Date("March 10 2026"),
+		endDate: new Date("March 17 2030"),
+		actionLink: "https://regulationwizard.com/",
+		isPlaceholder: false
+	},
+	{
 		emailPOC: "",
 		imageURL: "/ads/your_ad_5.png",
 		startDate: new Date("August 26 2025"),
-		endDate: new Date("December 26 2025"),
+		endDate: new Date("December 26 2030"),
 		actionLink: "#",
 		isPlaceholder: true
 	},
@@ -30,12 +38,5 @@ export default [
 		endDate: new Date("December 26 2025"),
 		actionLink: "#",
 		isPlaceholder: true
-	},
-	{
-		emailPOC: "carson.kellog@westpoint.edu",
-		imageURL: "/ads/carson.kellog.png",
-		startDate: new Date("October 9 2025"),
-		endDate: new Date("December 21 2025"),
-		actionLink: "https://maroon-tandie-92.tiiny.site/"
 	}
 ];

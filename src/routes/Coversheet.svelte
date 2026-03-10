@@ -30,4 +30,4 @@
 	}
 </style>
 
-<iframe name="coversheet" src={coversheetPath} bind:this={coversheetFrame}></iframe>
+<iframe name="coversheet" title="Coversheet PDF Container" src={coversheetPath} bind:this={coversheetFrame}></iframe>

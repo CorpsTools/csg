@@ -595,12 +595,12 @@
 
 <div class="container mt-4">
 	<div class="row">
-		<img
-			class="logo d-block mx-auto mb-2"
-			src={logo}
-			alt="Coversheet Generator Logo"
-		/>
 		<div class="col-md-8" id="linksSection">
+			<img
+				class="logo d-block mx-auto mb-2"
+				src={logo}
+				alt="Coversheet Generator Logo"
+			/>
 			<hr class="mb-2" />
 			<p class="text-center mb-2 mt-0">
 				<span
@@ -651,7 +651,7 @@
 			</div>
 		</div>
 		<div class="col-md-4">
-			<!-- <CorpsCard /> -->
+			<CorpsCard />
 			<div class="card wrapper-card mt-3">
 				<div class="card-body">
 					<div class="mb-1 course-input-wrap">
