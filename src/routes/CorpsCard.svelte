@@ -4,6 +4,8 @@
 	import { base } from '$app/paths';
 
 	let shuffledAds = [];
+	let adExtraTitle = "";
+	let adExtraBody = "";
 
 	onMount(() => {
 		shuffledAds = Array.from(ADVERTISEMENTS).filter(ad => {
@@ -22,6 +24,19 @@
 		const myCarouselElement = document.querySelector('#corpsCarousel');
 		const carousel = new bootstrap.Carousel(myCarouselElement, {
 			interval: 5000
+		});
+
+		// Track initial ad impression
+		if (window.rybbit && shuffledAds.length > 0) {
+			window.rybbit.event("AD_IMPRESSION", { id: shuffledAds[0].emailPOC + "|" + shuffledAds[0].actionLink });
+		}
+
+		// Track subsequent ad impressions when the carousel slides
+		myCarouselElement.addEventListener('slid.bs.carousel', event => {
+			const activeAd = shuffledAds[event.to];
+			if (activeAd && window.rybbit) {
+				window.rybbit.event("AD_IMPRESSION", { id: activeAd.emailPOC + "|" + activeAd.actionLink });
+			}
 		});
 	});
 
@@ -130,7 +145,20 @@
 		<div class="carousel-inner">
 			{#each shuffledAds as ad, index}
 				<div class="{'carousel-item' + (index === 0 ? ' active' : '')}">
-					<a href={ad.actionLink} target="_blank" data-bs-toggle="{ad.isPlaceholder ? 'modal' : ''}" data-bs-target="{ad.isPlaceholder ? '#adInfoModal' : ''}">
+					<a href={ad.actionLink && ad.actionLink !== '#' ? ad.actionLink : '#'} 
+					   target={ad.actionLink && ad.actionLink !== '#' ? "_blank" : null} 
+					   data-bs-toggle={ad.isPlaceholder ? 'modal' : ((!ad.actionLink || ad.actionLink === '#') && ad.descriptionHTML ? 'modal' : null)} 
+					   data-bs-target={ad.isPlaceholder ? '#adInfoModal' : ((!ad.actionLink || ad.actionLink === '#') && ad.descriptionHTML ? '#adExtraModal' : null)}
+					   on:click={(e) => { 
+					   		if (window.rybbit) {
+					   			window.rybbit.event("AD_CLICK", { id: ad.emailPOC + "|" + ad.actionLink });
+					   		}
+					   		if (!ad.actionLink || ad.actionLink === '#') e.preventDefault();
+					   		if ((!ad.actionLink || ad.actionLink === '#') && ad.descriptionHTML) {
+					   			adExtraTitle = ad.emailPOC;
+					   			adExtraBody = ad.descriptionHTML;
+					   		}
+					   }}>
 						<img src="{base + ad.imageURL}" class="d-block w-100">
 					</a>
 					<div class="carousel-caption d-none d-md-block">
@@ -179,6 +207,23 @@
 				<hr />
 				<p class="text-center">Click below to submit a card.</p>
 				<a class="btn btn-warning w-100 text-center btn-lg" href="https://forms.office.com/r/SP49Wa30yH" target="_blank">Submit a CorpsCard Advertisement</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="adExtraModal" tabindex="-1" aria-labelledby="adExtraModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg modal-dialog-centered">
+		<div class="modal-content">
+			<!-- Header -->
+			<div class="modal-header">
+				<h5 class="modal-title" id="adExtraModalLabel">{adExtraTitle}</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+
+			<!-- Body -->
+			<div class="modal-body">
+				<p>{@html adExtraBody}</p>
 			</div>
 		</div>
 	</div>
