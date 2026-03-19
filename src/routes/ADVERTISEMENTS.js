@@ -29,7 +29,7 @@ export default [
 		imageURL: "/ads/andrew.gatzke.png",
 		startDate: new Date("March 16 2026"),
 		endDate: new Date("May 25 2026"),
-		actionLink: "#recall-rice",
+		actionLink: "#",
 		descriptionHTML: "Recall Rice is a cadet restaurant that serves food before Recall most Sundays.",
 		isPlaceholder: false
 	},
