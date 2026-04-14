@@ -30,25 +30,25 @@ export default [
 		startDate: new Date("March 16 2026"),
 		endDate: new Date("May 25 2026"),
 		actionLink: "#",
-		descriptionHTML: "Recall Rice is a cadet restaurant that serves food before Recall most Sundays.",
+		descriptionHTML: "Recall Rice is a cadet restaurant that serves food before Recall most Sundays. (Davis Shelf)",
 		isPlaceholder: false
 	},
 	{
-		emailPOC: "",
-		imageURL: "/ads/your_ad_5.png",
-		startDate: new Date("August 26 2025"),
-		endDate: new Date("December 26 2030"),
-		actionLink: "#",
+		emailPOC: "noah.busch@westpoint.edu",
+		imageURL: "/ads/jayden.perry.png",
+		startDate: new Date("April 13 2026"),
+		endDate: new Date("May 4 2026"),
+		actionLink: "https://forms.office.com/r/jzbX01usz5",
 		descriptionHTML: null,
-		isPlaceholder: true
+		isPlaceholder: false
 	},
 	{
-		emailPOC: "",
-		imageURL: "/ads/your_ad_6.png",
-		startDate: new Date("August 26 2025"),
-		endDate: new Date("December 26 2025"),
-		actionLink: "#",
+		emailPOC: "carson.kellog@westpoint.edu",
+		imageURL: "/ads/carson.kellog.png",
+		startDate: new Date("April 13 2026"),
+		endDate: new Date("May 23 2026"),
+		actionLink: "https://maroon-tandie-92.tiiny.site/",
 		descriptionHTML: null,
-		isPlaceholder: true
-	}
+		isPlaceholder: false
+	},
 ];

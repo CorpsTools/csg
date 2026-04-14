@@ -162,7 +162,7 @@
 						<img src="{base + ad.imageURL}" class="d-block w-100">
 					</a>
 					<div class="carousel-caption d-none d-md-block">
-						<p class="m-0" style="pointer-events: auto;">{ad.emailPOC}</p>
+						<p class="m-0" style="pointer-events: auto;"></p>
 					</div>
 				</div>
 			{/each}
