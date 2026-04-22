@@ -51,4 +51,13 @@ export default [
 		descriptionHTML: null,
 		isPlaceholder: false
 	},
+	{
+		emailPOC: "joshua.george@westpoint.edu",
+		imageURL: "/ads/joshua.george.png",
+		startDate: new Date("April 21 2026"),
+		endDate: new Date("May 11 2026"),
+		actionLink: "#",
+		descriptionHTML: null,
+		isPlaceholder: false
+	}
 ];
