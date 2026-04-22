@@ -60,13 +60,13 @@ export default [
 		descriptionHTML: null,
 		isPlaceholder: false
 	},
-	// {
-	// 	emailPOC: "korbin.deary@westpoint.edu",
-	// 	imageURL: "/ads/korbin.deary.png",
-	// 	startDate: new Date("April 21 2026"),
-	// 	endDate: new Date("May 11 2030"),
-	// 	actionLink: "https://transpo.corps.tools",
-	// 	descriptionHTML: null,
-	// 	isPlaceholder: false
-	// }
+	{
+		emailPOC: "korbin.deary@westpoint.edu",
+		imageURL: "/ads/korbin.deary.png",
+		startDate: new Date("April 21 2026"),
+		endDate: new Date("May 11 2030"),
+		actionLink: "https://transpo.corps.tools",
+		descriptionHTML: null,
+		isPlaceholder: false
+	}
 ];
