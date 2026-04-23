@@ -904,7 +904,7 @@ Jane Roe 26 D2"
 						/>
 						<button
 							type="button"
-							class="btn btn-secondary"
+							class="btn btn-outline-dark"
 							on:click={prependPDFClick}
 							data-bs-toggle="tooltip"
 							data-bs-title="Upload a PDF File to prepend the coversheet too."
@@ -918,7 +918,7 @@ Jane Roe 26 D2"
 					>
 						<button
 							type="button"
-							class="btn btn-secondary"
+							class="btn btn-outline-dark"
 							on:click={copyImageToClipboard}
 							data-bs-toggle="tooltip"
 							data-bs-title="Copies the coversheet (as an image) to your clipboard to paste into your Word document. May be more consistent than text."
@@ -929,7 +929,7 @@ Jane Roe 26 D2"
 						>
 						<button
 							type="button"
-							class="btn btn-secondary"
+							class="btn btn-outline-dark"
 							on:click={copyHTMLToClipboard}
 							data-bs-toggle="tooltip"
 							data-bs-title="Copies the coversheet (as text) to your clipboard to paste into your Word document."
@@ -984,22 +984,22 @@ Jane Roe 26 D2"
 					>
 						<button
 							type="button"
-							class="btn btn-secondary"
+							class="btn btn-outline-secondary"
 							on:click={clearSigPad}>Clear</button
 						>
 						<button
 							type="button"
-							class="btn btn-secondary"
+							class="btn btn-outline-secondary"
 							on:click={drawModeSigPad}>Draw</button
 						>
 						<button
 							type="button"
-							class="btn btn-secondary"
+							class="btn btn-outline-secondary"
 							on:click={eraseModeSigPad}>Erase</button
 						>
 						<button
 							type="button"
-							class="btn btn-secondary"
+							class="btn btn-outline-secondary"
 							on:click={undoSigPad}>Undo</button
 						>
 					</div>
