@@ -1,5 +1,11 @@
 export default [
 	{
+		date: "22APR2026",
+		changes: `
+# Styling changes
+`
+	},
+	{
 		date: "10FEB2026",
 		changes: `
 # Fixed some accessibility issues.
