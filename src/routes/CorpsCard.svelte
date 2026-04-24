@@ -180,7 +180,7 @@
 			<span class="visually-hidden">Next</span>
 		</button>
 	</div>
-	<p class="text-muted mb-0 text-center" style="font-size: 0.75rem">CorpsTools is NOT affiliated with the content of the CorpsCards above.</p>
+	<!-- <p class="text-muted mb-0 text-center" style="font-size: 0.75rem">CorpsTools is NOT affiliated with the content of the CorpsCards above.</p> -->
 </div>
 
 <div class="modal fade" id="adInfoModal" tabindex="-1" aria-labelledby="adInfoModalLabel" aria-hidden="true">
