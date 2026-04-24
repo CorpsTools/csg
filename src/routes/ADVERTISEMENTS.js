@@ -68,5 +68,14 @@ export default [
 		actionLink: "https://transpo.corps.tools",
 		descriptionHTML: null,
 		isPlaceholder: false
+	},
+	{
+		emailPOC: "corps.tools@pm.me",
+		imageURL: "/ads/corps.tools.png",
+		startDate: new Date("April 21 2026"),
+		endDate: new Date("May 11 2100"),
+		actionLink: "https://corps.tools/about",
+		descriptionHTML: null,
+		isPlaceholder: false
 	}
 ];
