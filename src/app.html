@@ -21,7 +21,8 @@
 		<meta property="title" content="Coversheet Generator (CSG)" />
 		<meta property="description" content="Generate coversheets for your assignments." />
 		<meta name="twitter:card" content="summary_large_image">
-		<script src='%sveltekit.assets%/vendor/pdf-lib.min.js'></script>
+		<script defer src='%sveltekit.assets%/vendor/pdf-lib.min.js'></script>
+		<script defer src="%sveltekit.assets%/vendor/bootstrap.bundle.min.js"></script>
 		<script type="text/javascript" src="%sveltekit.assets%/CHANGELOG.js"></script>
 		<script type="text/javascript" data-corpstools-endorsement src="%sveltekit.assets%/vendor/endorsement.js" data-position="bottom-left" defer></script>
 		<script
@@ -34,6 +35,5 @@
 	<body data-sveltekit-preload-data="hover">
 		<div style="display: contents">%sveltekit.body%</div>
 		<script type="text/javascript" src="%sveltekit.assets%/events.js"></script>
-		<script src="%sveltekit.assets%/vendor/bootstrap.bundle.min.js"></script>
 	</body>
 </html>

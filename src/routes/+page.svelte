@@ -57,12 +57,14 @@
 	let aiCertificationOption = "unused";
 
 	onMount(() => {
-		const tooltipTriggerList = document.querySelectorAll(
-			'[data-bs-toggle="tooltip"]',
-		);
-		const tooltipList = [...tooltipTriggerList].map(
-			(tooltipTriggerEl) => new bootstrap.Tooltip(tooltipTriggerEl),
-		);
+		if (typeof bootstrap !== 'undefined') {
+			const tooltipTriggerList = document.querySelectorAll(
+				'[data-bs-toggle="tooltip"]',
+			);
+			const tooltipList = [...tooltipTriggerList].map(
+				(tooltipTriggerEl) => new bootstrap.Tooltip(tooltipTriggerEl),
+			);
+		}
 		savedSignatures = getSavedSignatures();
 		console.log("go f1rehouse 🔥🔥🔥");
 

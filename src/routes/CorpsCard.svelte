@@ -21,23 +21,27 @@
 			actionLink: "https://corps.tools"
 		});
 
-		const myCarouselElement = document.querySelector('#corpsCarousel');
-		const carousel = new bootstrap.Carousel(myCarouselElement, {
-			interval: 5000
-		});
+		if (typeof bootstrap !== 'undefined') {
+			const myCarouselElement = document.querySelector('#corpsCarousel');
+			const carousel = new bootstrap.Carousel(myCarouselElement, {
+				interval: 5000
+			});
+
+			// Track subsequent ad impressions when the carousel slides
+			myCarouselElement.addEventListener('slid.bs.carousel', event => {
+				const activeAd = shuffledAds[event.to];
+				if (activeAd && window.rybbit) {
+					window.rybbit.event("AD_IMPRESSION", { id: activeAd.emailPOC + "|" + activeAd.actionLink });
+				}
+			});
+		} else {
+			console.error("Bootstrap not found when mounting CorpsCard. Carousel and Tooltips may not work.");
+		}
 
 		// Track initial ad impression
 		if (window.rybbit && shuffledAds.length > 0) {
 			window.rybbit.event("AD_IMPRESSION", { id: shuffledAds[0].emailPOC + "|" + shuffledAds[0].actionLink });
 		}
-
-		// Track subsequent ad impressions when the carousel slides
-		myCarouselElement.addEventListener('slid.bs.carousel', event => {
-			const activeAd = shuffledAds[event.to];
-			if (activeAd && window.rybbit) {
-				window.rybbit.event("AD_IMPRESSION", { id: activeAd.emailPOC + "|" + activeAd.actionLink });
-			}
-		});
 	});
 
 	function shuffle(array) {
