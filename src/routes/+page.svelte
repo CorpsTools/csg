@@ -39,7 +39,8 @@
 	let savedSignatures = [];
 	let showingSuccessfulCopyText = false;
 	let showingSuccessfulCopyImage = false;
-	let pronoun = "I";
+	let coversheetClipboardText = "";
+	let coversheetClipboardHTML = "";
 	const COVERSHEET_STORAGE_KEY = "CSG_COVERSHEET_COURSE_MAP";
 	let courseAutofillHint = "";
 
@@ -50,13 +51,19 @@
 	let instructor = "";
 	let cadets = "";
 	let assignmentDate = "";
-	let shouldAddSignatureDate = true;
+	let signatureDate = "";
 	let endTextPositionUnderTitle = false;
 	let endText = "";
 	let certificationOption = "used";
-	let aiCertificationOption = "unused";
 
 	onMount(() => {
+		function receiveCoversheetClipboardPayload(event) {
+			if (!event.data?.custom || !event.data.clipboardPayload) return;
+			coversheetClipboardText = event.data.clipboardPayload.text || "";
+			coversheetClipboardHTML = event.data.clipboardPayload.html || "";
+		}
+		window.addEventListener("message", receiveCoversheetClipboardPayload);
+
 		if (typeof bootstrap !== 'undefined') {
 			const tooltipTriggerList = document.querySelectorAll(
 				'[data-bs-toggle="tooltip"]',
@@ -64,6 +71,12 @@
 			const tooltipList = [...tooltipTriggerList].map(
 				(tooltipTriggerEl) => new bootstrap.Tooltip(tooltipTriggerEl),
 			);
+			const announcementElement = document.getElementById(
+				"ay27AnnouncementModal",
+			);
+			if (announcementElement) {
+				new bootstrap.Modal(announcementElement).show();
+			}
 		}
 		savedSignatures = getSavedSignatures();
 		console.log("go f1rehouse 🔥🔥🔥");
@@ -107,6 +120,10 @@
 				}
 			}
 		});
+
+		return () => {
+			window.removeEventListener("message", receiveCoversheetClipboardPayload);
+		};
 	});
 
 	function blobToBase64(blob) {
@@ -177,15 +194,14 @@
 	$: {
 		coversheetFrame;
 		assignmentDate;
+		signatureDate;
 		assignmentName;
 		courseName;
 		section;
 		instructor;
 		cadets;
-		shouldAddSignatureDate;
 		endTextPositionUnderTitle;
 		certificationOption;
-		aiCertificationOption;
 		endText = endText.toUpperCase();
 		rehydrateCoversheetFrame();
 	}
@@ -209,6 +225,11 @@
 	function rehydrateCoversheetFrame() {
 		let dateObj = new Date(assignmentDate + "T00:00");
 		let dateString = `${dateObj.getDate()} ${dateObj.toLocaleString("default", { month: "long" }).toUpperCase()} ${dateObj.getFullYear()}`;
+		let signatureDateString = "";
+		if (signatureDate) {
+			let signatureDateObj = new Date(signatureDate + "T00:00");
+			signatureDateString = `${signatureDateObj.getDate()} ${signatureDateObj.toLocaleString("default", { month: "long" }).toUpperCase()} ${signatureDateObj.getFullYear()}`;
+		}
 
 		cadetsErrorText = "";
 		const cadetLines = cadets
@@ -274,7 +295,7 @@
 			if (!cadet.structured) return "";
 			const nameParts = cadet.name.trim().split(/\s+/);
 			return nameParts.length >= 2
-				? `${nameParts[0][0].toUpperCase()}${nameParts[1][0].toUpperCase()}`
+				? `${nameParts[0][0].toUpperCase()}${nameParts[nameParts.length - 1][0].toUpperCase()}`
 				: "";
 		});
 		const pronoun = parsedCadets.length > 1 ? "WE" : "I";
@@ -300,8 +321,7 @@
 				date: dateString,
 				pronoun: pronoun,
 				certificationOption: certificationOption,
-				aiCertificationOption: aiCertificationOption,
-				shouldAddSignatureDate: shouldAddSignatureDate,
+				signatureDate: signatureDateString,
 				endTextPositionUnderTitle: endTextPositionUnderTitle,
 				initials: initials,
 				endText: endText.trim(),
@@ -400,15 +420,45 @@
 
 	async function copyHTMLToClipboard() {
 		storeCoversheetByCourse();
-		coversheetFrame.postMessage({
-			custom: true,
-			copyToClipboard: true,
-		});
 
-		showingSuccessfulCopyText = true;
-		setTimeout(() => {
-			showingSuccessfulCopyText = false;
-		}, 1000);
+		try {
+			if (!coversheetClipboardText) {
+				throw new Error("The coversheet is not ready to copy.");
+			}
+
+			let copied = false;
+			if (navigator.clipboard?.write && window.ClipboardItem) {
+				await navigator.clipboard.write([
+					new ClipboardItem({
+						"text/html": new Blob([coversheetClipboardHTML], { type: "text/html" }),
+						"text/plain": new Blob([coversheetClipboardText], { type: "text/plain" }),
+					}),
+				]);
+				copied = true;
+			} else if (navigator.clipboard?.writeText) {
+				await navigator.clipboard.writeText(coversheetClipboardText);
+				copied = true;
+			} else {
+				const textArea = document.createElement("textarea");
+				textArea.value = coversheetClipboardText;
+				textArea.style.position = "fixed";
+				textArea.style.opacity = "0";
+				document.body.appendChild(textArea);
+				textArea.select();
+				copied = document.execCommand("copy");
+				textArea.remove();
+			}
+
+			if (!copied) throw new Error("The browser declined the copy request.");
+
+			showingSuccessfulCopyText = true;
+			setTimeout(() => {
+				showingSuccessfulCopyText = false;
+			}, 1000);
+		} catch (error) {
+			console.error(error);
+			alert("Unable to copy the coversheet text. Please try again from the local site.");
+		}
 	}
 
 	async function copyImageToClipboard() {
@@ -524,9 +574,9 @@
 			function listener(event) {
 				if (!event.data.pdf) return;
 				resolve(event.data.pdf);
-				coversheetFrame.removeEventListener("message", listener);
+				window.removeEventListener("message", listener);
 			}
-			coversheetFrame.addEventListener("message", listener);
+			window.addEventListener("message", listener);
 			coversheetFrame.postMessage({
 				custom: true,
 				getPDF: true,
@@ -539,9 +589,9 @@
 			function listener(event) {
 				if (!event.data.return_image) return;
 				resolve(event.data.return_image);
-				coversheetFrame.removeEventListener("message", listener);
+				window.removeEventListener("message", listener);
 			}
-			coversheetFrame.addEventListener("message", listener);
+			window.addEventListener("message", listener);
 			coversheetFrame.postMessage({
 				custom: true,
 				getCoversheetImage: true,
@@ -727,7 +777,7 @@
 						/>
 					</div>
 					<div class="input-group">
-						<span class="input-group-text" id="dateInput">Date</span
+						<span class="input-group-text" id="dateInput">Due</span
 						>
 						<input
 							type="date"
@@ -735,23 +785,21 @@
 							bind:value={assignmentDate}
 							aria-describedby="dateInput"
 						/>
-						<span
-							class="input-group-text"
-							id="signatureDateCheckLabel">Signature?</span
+						<span class="input-group-text" id="signatureDateInput"
+							>Signed</span
 						>
-						<div class="input-group-text">
-							<input
-								class="form-check-input mt-0"
-								type="checkbox"
-								bind:checked={shouldAddSignatureDate}
-							/>
-						</div>
+						<input
+							type="date"
+							class="form-control"
+							bind:value={signatureDate}
+							aria-describedby="signatureDateInput"
+						/>
 					</div>
 					<hr />
 					<div class="mb-2">
 						<label for="cadetsInput" class="form-label"
 							>Cadets <small class="text-muted"
-								>[Full Name] [Year] [Company]</small
+								>— one per line: Full Name Year Company</small
 							></label
 						>
 						<textarea
@@ -761,10 +809,11 @@
 							on:input={upperCaseHandler}
 							data-bs-toggle="tooltip"
 							data-bs-trigger="focus"
-							data-bs-title="Enter '[Full Name] [Year] [Company]' to auto-format, or type any custom line to place it directly on the coversheet."
+							data-bs-title="Enter one cadet per line as 'Full Name Year Company'. Certification initials are generated from each cadet's first and last names."
 							placeholder="John Doe 26 I1
 Jane Roe 26 D2"
 						></textarea>
+						<div class="form-text">Initials are added automatically for every valid cadet line.</div>
 						<!-- <p class="text-danger">{cadetsErrorText}</p> -->
 					</div>
 					<div class="">
@@ -807,27 +856,16 @@ Jane Roe 26 D2"
 								bind:value={certificationOption}
 							>
 								<option value="used" selected
-									>{pronoun} used sources</option
+									>Documented sources/assistance</option
 								>
 								<option value="unused"
-									>{pronoun} did not use sources</option
+									>No sources/assistance</option
 								>
-								<option value="none">[Leave Blank]</option>
+								<option value="none">Leave blank</option>
 							</select>
 							<label class="input-group-text" for="citationSelect"
-								>and</label
+								>Certification</label
 							>
-							<select
-								class="form-select"
-								id="aiCitationSelect"
-								bind:value={aiCertificationOption}
-							>
-								<option value="used">used AI.</option>
-								<option value="unused" selected
-									>did not use AI.</option
-								>
-								<option value="none">[Leave Blank]</option>
-							</select>
 						</div>
 						<!-- <div class="input-group input-group-sm mb-0 w-100">
 							<span class="input-group-text" id="didUseSourcesCheck">Place Initials?</span>
@@ -945,7 +983,49 @@ Jane Roe 26 D2"
 					<p class="text-center text-muted m-0">
 						Developed by CDT Korbin Deary, Class of '26
 					</p>
+					<p class="text-center text-muted m-0">
+						Maintained by CDT Salar Sheriff, Class of '27
+					</p>
 				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div
+	class="modal fade"
+	id="ay27AnnouncementModal"
+	tabindex="-1"
+	aria-labelledby="ay27AnnouncementModalLabel"
+	aria-hidden="true"
+>
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h1 class="modal-title fs-5" id="ay27AnnouncementModalLabel">
+					AY 27-1 Coversheet Support
+				</h1>
+				<button
+					type="button"
+					class="btn-close"
+					data-bs-dismiss="modal"
+					aria-label="Close"
+				></button>
+			</div>
+			<div class="modal-body">
+				<p class="fw-semibold">Now supporting the new AY 27-1 coversheet.</p>
+				<p class="mb-0">
+					There still may be bugs and items to fix. Please email
+					<a href="mailto:salar.sheriff@westpoint.edu?subject=Coversheet%20Generator%20Issue"
+						>salar.sheriff@westpoint.edu</a
+					>
+					with any issues, and I’ll try to get them sorted as soon as possible.
+				</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-warning" data-bs-dismiss="modal">
+					Got it
+				</button>
 			</div>
 		</div>
 	</div>

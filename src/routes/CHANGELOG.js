@@ -1,5 +1,12 @@
 export default [
 	{
+		date: "16AUG2026",
+		changes: `
+# Updated the cover page and certification statements to comply with the June 2026 DAAW.
++ Added a separate signing date so the signature date can differ from the assignment due date.
+`
+	},
+	{
 		date: "22APR2026",
 		changes: `
 # Styling changes

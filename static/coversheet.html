@@ -26,9 +26,63 @@ html {
 	width: 100vw;
 	max-width: 100vw;
 	overflow-x: hidden;
-	height: 99vh;
+	height: auto;
 	margin: 0;
 }
+
+body {
+	margin: 0;
+	width: 100vw;
+	min-height: 129.4118vw;
+	overflow: hidden;
+}
+
+#cshtml {
+	position: relative;
+	z-index: 0;
+	width: 100vw;
+	height: 129.4118vw;
+	box-sizing: border-box;
+	background: white;
+	font-family: "Times New Roman", serif;
+	font-size: 1.9608vw;
+	line-height: 1.15;
+}
+
+.cover-line {
+	position: absolute;
+	left: 11.7647%;
+	right: 11.7647%;
+	margin: 0;
+}
+
+.cover-center { text-align: center; }
+.cover-header { font-weight: bold; }
+.certification { line-height: 1.15; }
+
+.initial-block {
+	display: inline-block;
+	white-space: nowrap;
+}
+
+.signature-row {
+	display: grid;
+	grid-template-columns: 15.2308% 38.4872% 7.5385% 0.6410% 33.3333%;
+	align-items: baseline;
+	white-space: nowrap;
+}
+
+.signature-line,
+.signature-date-line {
+	border-bottom: 1px solid currentColor;
+}
+
+.signature-date-line {
+	grid-column: 5;
+	text-align: center;
+}
+
+@page { size: letter; margin: 0; }
 
 @media screen {
 
@@ -60,6 +114,7 @@ html {
 .drag-img {
 	border: 1px solid black;
 	position: absolute;
+	z-index: 10;
 	transform: translate(0px, 0px);
 	user-select: none;
 	-moz-user-select: none;
@@ -79,13 +134,11 @@ html {
 
 .printing .drag-img {
 	border-color: transparent;
-	top: 0.6in;
 }
 
 @media print {
 	.drag-img {
 		border-color: transparent;
-		top: 0.6in;
 	}
 }
 
@@ -108,7 +161,7 @@ html {
 		let gotResponse = false;
 
 		const opt = {
-			margin:       [1, 1, 0, 1],
+			margin:       0,
 			filename:     'coversheet.pdf',
 			image:        { type: 'jpeg', quality: 1 },
 			html2canvas:  { scale: 1 },
@@ -154,125 +207,81 @@ html {
 		}
 
 		function updateCoversheetText(state) {
-			const SPACE_CHAR = ' ';
+			const isGroup = state.cadets.length > 1;
+			const subjectPronoun = isGroup ? 'We' : 'I';
+			const objectPronoun = isGroup ? 'we' : 'I';
+			const selectedInitials = state.initials.filter(Boolean).join(' ');
+			const usedInitials = state.certificationOption === 'used' && selectedInitials ? selectedInitials : '_____';
+			const unusedInitials = state.certificationOption === 'unused' && selectedInitials ? selectedInitials : '_____';
+			const positions = isGroup ? {
+				title: 21.6414, course: 30.3535, section: 33.8384, instructor: 37.3232,
+				by: 44.2929, cadets: 47.7778, location: 53.0051, date: 56.4899,
+				used: 65.2020, unused: 72.1717, signature: 80.8838
+			} : {
+				title: 23.3838, course: 35.5808, section: 39.0657, instructor: 42.5505,
+				by: 53.0051, cadets: 56.4899, location: 59.9747, date: 63.4596,
+				used: 75.6566, unused: 80.8838, signature: 87.8535
+			};
+			const signatureRows = state.cadets.map((_, index) => `
+				<p class="cover-line signature-row" style="top:${positions.signature + index * 1.7424}%">
+					<span>SIGNATURE:</span><span class="signature-line"></span><span>DATE:</span><span class="signature-date-line">${state.signatureDate || ''}</span>
+				</p>`).join('');
 			let csHTML = `
-<p class=MsoNormal style='line-height:14.0pt'><span style='font-size:12.0pt'>&nbsp;</span></p>
-
-<p class=MsoNormal align=center style='text-align:center'><span
-style='font-size:12.0pt'>UNITED STATES MILITARY ACADEMY</span></p>
-
-<p class=MsoNormal style='line-height:10.0pt'><span style='font-size:12.0pt'>&nbsp;</span></p>
-
-<p class=MsoNormal style='line-height:10.0pt'><span style='font-size:12.0pt'>&nbsp;</span></p>
-
-<p class=MsoNormal style='line-height:10.0pt'><span style='font-size:12.0pt'>&nbsp;</span></p>
-
-<p class=MsoNormal style='line-height:11.4pt'><span style='font-size:12.0pt'>&nbsp;</span></p>
-
-<p class=MsoNormal align=center style='text-align:center'><span
-style='font-size:12.0pt'>${state.assignmentName}</span></p>
-
-${!state.endTextPositionUnderTitle ? `` : `<p class=MsoNormal align=center style='text-align:center'><span style='font-size:12.0pt'>${state.endText}</span></p>`}
-
-<p class=MsoNormal style='line-height:10.0pt'><span style='font-size:12.0pt'>&nbsp;</span></p>
-
-<p class=MsoNormal style='line-height:10.0pt'><span style='font-size:12.0pt'>&nbsp;</span></p>
-
-<p class=MsoNormal style='line-height:10.0pt'><span style='font-size:12.0pt'>&nbsp;</span></p>
-
-<p class=MsoNormal style='line-height:10.0pt'><span style='font-size:12.0pt'>&nbsp;</span></p>
-
-<p class=MsoNormal style='line-height:15.2pt'><span style='font-size:12.0pt'>&nbsp;</span></p>
-
-<p class=MsoNormal align=center style='text-align:center'><span
-style='font-size:12.0pt'>${state.course}</span></p>
-
-<p class=MsoNormal style='line-height:13.8pt'><span style='font-size:12.0pt'>&nbsp;</span></p>
-
-<p class=MsoNormal align=center style='text-align:center'><span
-style='font-size:12.0pt'>${state.section}</span></p>
-
-<p class=MsoNormal style='line-height:13.8pt'><span style='font-size:12.0pt'>&nbsp;</span></p>
-
-<p class=MsoNormal align=center style='text-align:center'><span
-style='font-size:12.0pt'>${state.instructor}</span></p>
-
-<p class=MsoNormal style='line-height:10.0pt'><span style='font-size:12.0pt'>&nbsp;</span></p>
-
-<p class=MsoNormal style='line-height:10.0pt'><span style='font-size:12.0pt'>&nbsp;</span></p>
-
-<p class=MsoNormal style='line-height:10.0pt'><span style='font-size:12.0pt'>&nbsp;</span></p>
-
-<p class=MsoNormal style='line-height:11.4pt'><span style='font-size:12.0pt'>&nbsp;</span></p>
-
-<p class=MsoNormal align=center style='text-align:center'><span
-style='font-size:12.0pt'>BY</span></p>
-
-<p class=MsoNormal style='line-height:13.8pt'><span style='font-size:12.0pt'>&nbsp;</span></p>
-
-${state.cadets.map(c => `<p class=MsoNormal align=center style='text-align:center'><span
-style='font-size:12.0pt'>${c}</span></p>`).join('\n')}
-
-<p class=MsoNormal style='line-height:13.8pt'><span style='font-size:12.0pt'>&nbsp;</span></p>
-
-<p class=MsoNormal align=center style='text-align:center'><span
-style='font-size:12.0pt'>WEST POINT, NEW YORK</span></p>
-
-<p class=MsoNormal style='line-height:13.8pt'><span style='font-size:12.0pt'>&nbsp;</span></p>
-
-<p class=MsoNormal align=center style='text-align:center'><span
-style='font-size:12.0pt'>${state.date}</span></p>
-
-<p class=MsoNormal style='line-height:10.0pt'><span style='font-size:12.0pt'>&nbsp;</span></p>
-
-<p class=MsoNormal style='line-height:10.0pt'><span style='font-size:12.0pt'>&nbsp;</span></p>
-
-<p class=MsoNormal style='line-height:10.0pt'><span style='font-size:12.0pt'>&nbsp;</span></p>
-
-<p class=MsoNormal style='line-height:11.4pt'><span style='font-size:12.0pt'>&nbsp;</span></p>
-
-<p class=MsoNormal><span style='font-size:12.0pt'><span class="underlined">${(
-	state.certificationOption === 'used' && state.initials.length ? state.initials.join(SPACE_CHAR).padEnd(5, SPACE_CHAR) : '_'
-).padEnd(5, SPACE_CHAR)}</span> ${state.pronoun} CERTIFY THAT ${state.pronoun} HAVE COMPLETELY DOCUMENTED ALL SOURCES THAT ${state.pronoun} USED TO COMPLETE THIS ASSIGNMENT AND
-THAT ${state.pronoun} ACKNOWLEDGED ALL ASSISTANCE ${state.pronoun} RECEIVED IN THE COMPLETION OF THIS
-ASSIGNMENT.</span></p>
-
-<p class=MsoNormal style='line-height:9.3pt'><span style='font-size:12.0pt'>&nbsp;</span></p>
-
-<p class=MsoNormal><span style='font-size:12.0pt'><span class="underlined">${(
-	state.certificationOption === 'unused' && state.initials.length ? state.initials.join(SPACE_CHAR) : '_'
-).padEnd(5, SPACE_CHAR)}</span> ${state.pronoun} CERTIFY THAT ${state.pronoun} DID
-NOT USE ANY SOURCES OR RECEIVE ANY ASSISTANCE REQUIRING DOCUMENTATION
-WHILE COMPLETING THIS ASSIGNMENT.</span></p>
-
-<p class=MsoNormal style='line-height:9.3pt'><span style='font-size:12.0pt'>&nbsp;</span></p>
-
-<p class=MsoNormal><span style='font-size:12.0pt'>AND:</span></p>
-
-<p class=MsoNormal style='line-height:11.3pt'><span style='font-size:12.0pt'>&nbsp;</span></p>
-
-<p class=MsoNormal><span style='font-size:12.0pt'><span class="underlined">${(
-	state.aiCertificationOption === 'used' && state.initials.length ? state.initials.join(SPACE_CHAR) : '_'
-).padEnd(5, SPACE_CHAR)}</span> ${state.pronoun} ACKNOWLEDGE THAT ${state.pronoun}
-USED GENERATIVE AI TO COMPLETE THIS ASSIGNMENT.</span></p>
-
-<p class=MsoNormal style='line-height:9.7pt'><span style='font-size:12.0pt'>&nbsp;</span></p>
-
-<p class=MsoNormal><span style='font-size:12.0pt'><span class="underlined">${(
-	state.aiCertificationOption === 'unused' && state.initials.length ? state.initials.join(SPACE_CHAR) : '_'
-).padEnd(5, SPACE_CHAR)}</span> ${state.pronoun} ACKNOWLEDGE THAT ${state.pronoun} DID
-NOT USE GENERATIVE AI TO COMPLETE THIS ASSIGNMENT.</span></p>
-
-<p class=MsoNormal style='line-height:10.0pt'><span style='font-size:12.0pt'>&nbsp;</span></p>
-
-<p class=MsoNormal style='line-height:17.25pt'><span style='font-size:12.0pt'>&nbsp;</span></p>
-
-${state.cadets.map(c => `<p class=MsoNormal><span style='font-size:12.0pt'>SIGNATURE:______________________________________DATE:<span class="underlined"> ${state.shouldAddSignatureDate ? state.date.padEnd(16, SPACE_CHAR) : '_' + SPACE_CHAR.repeat(16)}</span></span></p>`).join('\n')}
-
-${state.endTextPositionUnderTitle ? `` : `<p class=MsoNormal><span style='font-size:12.0pt'>${state.endText}</span></p>`}
+				<p class="cover-line cover-center" style="top:12.9293%">UNITED STATES MILITARY ACADEMY</p>
+				<p class="cover-line cover-center" style="top:${positions.title}%">${state.assignmentName}</p>
+				${state.endTextPositionUnderTitle && state.endText ? `<p class="cover-line cover-center" style="top:${positions.title + 2.2}%">${state.endText}</p>` : ''}
+				<p class="cover-line cover-center" style="top:${positions.course}%">${state.course}</p>
+				<p class="cover-line cover-center" style="top:${positions.section}%">${state.section}</p>
+				<p class="cover-line cover-center" style="top:${positions.instructor}%">${state.instructor}</p>
+				<p class="cover-line cover-center" style="top:${positions.by}%">BY</p>
+				<div class="cover-line cover-center" style="top:${positions.cadets}%; line-height:1.15">${state.cadets.join('<br>')}</div>
+				<p class="cover-line cover-center" style="top:${positions.location}%">WEST POINT, NEW YORK</p>
+				<p class="cover-line cover-center" style="top:${positions.date}%">${state.date}</p>
+				<p class="cover-line certification" style="top:${positions.used}%"><span class="initial-block">${usedInitials}</span> ${subjectPronoun} certify that ${objectPronoun} have completely documented all sources and acknowledged all assistance ${objectPronoun} received, <b>to include the use of generative AI,</b> in the completion of this assignment.</p>
+				<p class="cover-line certification" style="top:${positions.unused}%"><span class="initial-block">${unusedInitials}</span> ${subjectPronoun} certify that ${objectPronoun} did not use any sources or receive any assistance requiring documentation or acknowledgement, <b>to include the use of generative AI,</b> in the completion of this assignment.</p>
+				${signatureRows}
+				${!state.endTextPositionUnderTitle && state.endText ? `<p class="cover-line" style="top:91%">${state.endText}</p>` : ''}
 			`;
 
 			document.querySelector('#cshtml').innerHTML = csHTML;
+		}
+
+		function getClipboardPayload() {
+			const coversheet = document.querySelector('#cshtml');
+			const pageRect = coversheet.getBoundingClientRect();
+			const pointsPerPixel = 792 / pageRect.height;
+			const wordPageStart = 72;
+			let cursor = wordPageStart;
+			const lines = Array.from(coversheet.querySelectorAll('.cover-line'))
+				.sort((a, b) => a.getBoundingClientRect().top - b.getBoundingClientRect().top);
+
+			const wordRows = lines.map(line => {
+				const rect = line.getBoundingClientRect();
+				const top = (rect.top - pageRect.top) * pointsPerPixel;
+				const height = rect.height * pointsPerPixel;
+				const gap = Math.max(0, top - cursor);
+				cursor = Math.max(cursor, top + height);
+				const spacerRow = gap > 0.1
+					? `<tr height="${gap.toFixed(2)}" style="height:${gap.toFixed(2)}pt;mso-height-source:userset;"><td style="height:${gap.toFixed(2)}pt;padding:0;border:0;font-size:1pt;line-height:1pt;">&nbsp;</td></tr>`
+					: '';
+
+				if (line.classList.contains('signature-row')) {
+					const date = line.querySelector('.signature-date-line')?.textContent || '';
+					return `${spacerRow}<tr style="height:${height.toFixed(2)}pt;"><td style="height:${height.toFixed(2)}pt;padding:0;border:0;vertical-align:top;"><table role="presentation" cellspacing="0" cellpadding="0" style="border-collapse:collapse;table-layout:fixed;width:468pt;margin:0;mso-table-lspace:0pt;mso-table-rspace:0pt;font-family:'Times New Roman',serif;font-size:12pt;line-height:13.8pt;"><tr><td style="width:71.28pt;padding:0;white-space:nowrap;">SIGNATURE:</td><td style="width:180.12pt;padding:0;border-bottom:1pt solid #000;">&nbsp;</td><td style="width:35.28pt;padding:0;white-space:nowrap;">DATE:</td><td style="width:3pt;padding:0;"></td><td style="width:156pt;padding:0;border-bottom:1pt solid #000;text-align:center;white-space:nowrap;">${date || '&nbsp;'}</td><td style="width:22.32pt;padding:0;"></td></tr></table></td></tr>`;
+				}
+
+				const alignment = line.classList.contains('cover-center') ? 'center' : 'left';
+				const content = line.innerHTML.replace(
+					/class="initial-block"/g,
+					`style="display:inline-block;white-space:nowrap;"`
+				);
+				return `${spacerRow}<tr style="height:${height.toFixed(2)}pt;"><td style="height:${height.toFixed(2)}pt;padding:0;border:0;vertical-align:top;text-align:${alignment};font-family:'Times New Roman',serif;font-size:12pt;line-height:13.8pt;">${content}</td></tr>`;
+			}).join('');
+
+			return {
+				text: coversheet.innerText,
+				html: `<!doctype html><html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word"><body style="margin:0;padding:0;"><table role="presentation" cellspacing="0" cellpadding="0" style="border-collapse:collapse;table-layout:fixed;width:468pt;margin:0;mso-table-lspace:0pt;mso-table-rspace:0pt;font-family:'Times New Roman',serif;font-size:12pt;line-height:13.8pt;">${wordRows}</table></body></html>`
+			};
 		}
 
 		window.addEventListener("message", async (event) => {
@@ -309,7 +318,7 @@ ${state.endTextPositionUnderTitle ? `` : `<p class=MsoNormal><span style='font-s
 				document.body.scrollTop = 0;
 				document.body.classList.add('printing');
 				let data = await html2pdf().set({
-					margin:       [1, 1, 1, 1],
+					margin:       0,
 					image:        { type: 'png', quality: 1 },
 					html2canvas:  { scale: 3 },
 					jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
@@ -318,10 +327,10 @@ ${state.endTextPositionUnderTitle ? `` : `<p class=MsoNormal><span style='font-s
 				document.body.classList.remove('printing');
 				let blob = dataURItoBlob(data);
 				// console.log(data, blob);
-				event.target.postMessage({
+				event.source.postMessage({
 					custom: true,
 					return_image: blob
-				});
+				}, window.location.origin);
 			} else if(event.data.image) {
 				const div = document.createElement("div");
 				const randomClass = "drag" + Math.random().toString().slice(3);
@@ -391,14 +400,18 @@ ${state.endTextPositionUnderTitle ? `` : `<p class=MsoNormal><span style='font-s
 				(async () => {
 					// New Promise-based usage:
 					document.body.classList.add('printing');
-					event.target.postMessage({
+					event.source.postMessage({
 						custom: true,
 						pdf: await html2pdf().set(opt).from(document.body).output('blob')
-					});
+					}, window.location.origin);
 					document.body.classList.remove('printing');
 				})();
 			} else if(event.data.state) {
 				updateCoversheetText(event.data.state);
+				event.source.postMessage({
+					custom: true,
+					clipboardPayload: getClipboardPayload()
+				}, event.origin || '*');
 				gotResponse = true;
 			}
 		});

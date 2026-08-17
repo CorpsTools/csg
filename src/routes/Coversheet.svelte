@@ -25,7 +25,7 @@
 	iframe {
 		width: 100%;
 		overflow: hidden;
-		aspect-ratio: 8.5 / 9;
+		aspect-ratio: 8.5 / 11;
 /*		height: 80vh;*/
 	}
 </style>

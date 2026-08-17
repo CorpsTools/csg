@@ -1,7 +1,7 @@
 # Coversheet Generator
 
 ## Overview
-This repository contains the SvelteKit-powered Coversheet Generator used by USMA cadets to quickly produce assignment coversheets that conform to the latest DAAW guidance. The app runs entirely in the browser, supports offline-friendly workflows, and can be deployed as a static site (e.g. GitHub Pages or CorpsTools static hosting).
+This repository contains the SvelteKit-powered Coversheet Generator used by USMA cadets to quickly produce assignment coversheets that conform to the June 2026 DAAW guidance. The app runs entirely in the browser, supports offline-friendly workflows, and can be deployed as a static site (e.g. GitHub Pages or CorpsTools static hosting).
 
 ## Features
 - Guided form that auto-capitalizes fields, parses cadet rosters, and keeps course metadata in sync with `src/courses.js`.
