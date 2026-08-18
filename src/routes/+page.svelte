@@ -613,11 +613,38 @@
 		return `${capitalize(cadetLastName)}_${courseName.split(":")[0]}_${assignmentName}`;
 	}
 
-	function showPrintDialog() {
+	async function showPrintDialog() {
 		storeCoversheetByCourse();
-		document.title = generateFileName() + ".cover";
-		coversheetFrame.print();
-		document.title = "Coversheet Generator (CSG)";
+		const printWindow = window.open("", "_blank");
+		if (!printWindow) {
+			alert("Please allow pop-ups so the generated coversheet PDF can be printed.");
+			return;
+		}
+
+		printWindow.document.title = generateFileName() + ".cover.pdf";
+		printWindow.document.body.innerHTML =
+			'<p style="font-family:sans-serif;text-align:center;margin-top:3rem;">Preparing coversheet PDF…</p>';
+
+		try {
+			const pdfFile = await getCoversheetPDF();
+			const url = URL.createObjectURL(pdfFile);
+			printWindow.addEventListener(
+				"load",
+				() => {
+					setTimeout(() => {
+						printWindow.focus();
+						printWindow.print();
+					}, 500);
+				},
+				{ once: true },
+			);
+			printWindow.location.replace(url);
+			setTimeout(() => URL.revokeObjectURL(url), 5 * 60 * 1000);
+		} catch (error) {
+			console.error(error);
+			printWindow.close();
+			alert("Unable to prepare the coversheet PDF for printing.");
+		}
 	}
 
 	function saveSignature() {
@@ -932,7 +959,7 @@ Jane Roe 26 D2"
 							class="btn btn-dark"
 							on:click={showPrintDialog}
 							data-bs-toggle="tooltip"
-							data-bs-title="Opens the print window."
+							data-bs-title="Generates the same PDF as Download and opens it for printing."
 							>Print</button
 						>
 						<input
