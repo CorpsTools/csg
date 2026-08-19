@@ -615,34 +615,52 @@
 
 	async function showPrintDialog() {
 		storeCoversheetByCourse();
-		const printWindow = window.open("", "_blank");
-		if (!printWindow) {
-			alert("Please allow pop-ups so the generated coversheet PDF can be printed.");
-			return;
-		}
-
-		printWindow.document.title = generateFileName() + ".cover.pdf";
-		printWindow.document.body.innerHTML =
-			'<p style="font-family:sans-serif;text-align:center;margin-top:3rem;">Preparing coversheet PDF…</p>';
-
 		try {
 			const pdfFile = await getCoversheetPDF();
 			const url = URL.createObjectURL(pdfFile);
-			printWindow.addEventListener(
+			const printFrame = document.createElement("iframe");
+			printFrame.title = generateFileName() + ".cover.pdf";
+			printFrame.setAttribute("aria-hidden", "true");
+			printFrame.style.position = "fixed";
+			printFrame.style.right = "0";
+			printFrame.style.bottom = "0";
+			printFrame.style.width = "1px";
+			printFrame.style.height = "1px";
+			printFrame.style.border = "0";
+
+			let cleanedUp = false;
+			const cleanup = () => {
+				if (cleanedUp) return;
+				cleanedUp = true;
+				URL.revokeObjectURL(url);
+				printFrame.remove();
+			};
+
+			printFrame.addEventListener(
 				"load",
 				() => {
 					setTimeout(() => {
-						printWindow.focus();
-						printWindow.print();
-					}, 500);
+						try {
+							const frameWindow = printFrame.contentWindow;
+							if (!frameWindow) throw new Error("Print frame is unavailable.");
+							frameWindow.addEventListener("afterprint", cleanup, { once: true });
+							frameWindow.focus();
+							frameWindow.print();
+						} catch (error) {
+							console.error(error);
+							cleanup();
+							alert("Unable to open the coversheet print dialog.");
+						}
+					}, 750);
 				},
 				{ once: true },
 			);
-			printWindow.location.replace(url);
-			setTimeout(() => URL.revokeObjectURL(url), 5 * 60 * 1000);
+
+			document.body.appendChild(printFrame);
+			printFrame.src = url;
+			setTimeout(cleanup, 5 * 60 * 1000);
 		} catch (error) {
 			console.error(error);
-			printWindow.close();
 			alert("Unable to prepare the coversheet PDF for printing.");
 		}
 	}
@@ -1049,7 +1067,7 @@ Jane Roe 26 D2"
 					with any issues, and I’ll try to get them sorted as soon as possible.
 				</p>
 				<p class="small text-muted mt-3 mb-0">
-					<strong>Update timestamp:</strong> 18 August 2026, 9:32 PM EDT
+					<strong>Update timestamp:</strong> 18 August 2026, 9:40 PM EDT
 				</p>
 			</div>
 			<div class="modal-footer">
