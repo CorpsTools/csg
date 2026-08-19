@@ -1048,6 +1048,9 @@ Jane Roe 26 D2"
 					>
 					with any issues, and I’ll try to get them sorted as soon as possible.
 				</p>
+				<p class="small text-muted mt-3 mb-0">
+					<strong>Update timestamp:</strong> 18 August 2026, 9:32 PM EDT
+				</p>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-warning" data-bs-dismiss="modal">
