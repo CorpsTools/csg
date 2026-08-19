@@ -23,8 +23,11 @@ div.WordSection1
 -->
 
 html {
-	width: 100vw;
-	max-width: 100vw;
+	--page-width: 100vw;
+	--page-height: 129.4118vw;
+	--page-font-size: 1.9608vw;
+	width: 100%;
+	max-width: 100%;
 	overflow-x: hidden;
 	height: auto;
 	margin: 0;
@@ -32,20 +35,20 @@ html {
 
 body {
 	margin: 0;
-	width: 100vw;
-	min-height: 129.4118vw;
+	width: var(--page-width);
+	min-height: var(--page-height);
 	overflow: hidden;
 }
 
 #cshtml {
 	position: relative;
 	z-index: 0;
-	width: 100vw;
-	height: 129.4118vw;
+	width: var(--page-width);
+	height: var(--page-height);
 	box-sizing: border-box;
 	background: white;
 	font-family: "Times New Roman", serif;
-	font-size: 1.9608vw;
+	font-size: var(--page-font-size);
 	line-height: 1.15;
 }
 
@@ -164,9 +167,20 @@ body {
 			margin:       0,
 			filename:     'coversheet.pdf',
 			image:        { type: 'jpeg', quality: 1 },
-			html2canvas:  { scale: 1 },
+			html2canvas:  { scale: 1, scrollX: 0, scrollY: 0, windowWidth: document.documentElement.clientWidth },
 			jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
 		};
+
+		function updatePageDimensions() {
+			const pageWidth = document.documentElement.clientWidth;
+			const root = document.documentElement;
+			root.style.setProperty('--page-width', `${pageWidth}px`);
+			root.style.setProperty('--page-height', `${pageWidth * 11 / 8.5}px`);
+			root.style.setProperty('--page-font-size', `${pageWidth * 12 / 612}px`);
+		}
+
+		updatePageDimensions();
+		window.addEventListener('resize', updatePageDimensions);
 
 		document.addEventListener('paste', async (e) => {
 			e.preventDefault();
@@ -320,7 +334,7 @@ body {
 				let data = await html2pdf().set({
 					margin:       0,
 					image:        { type: 'png', quality: 1 },
-					html2canvas:  { scale: 3 },
+					html2canvas:  { scale: 3, scrollX: 0, scrollY: 0, windowWidth: document.documentElement.clientWidth },
 					jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
 				}).from(document.body).outputImg('datauristring');
 
