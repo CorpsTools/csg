@@ -135,6 +135,18 @@ body {
 	<!-- display: inline-block; -->
 }
 
+body.printing {
+	--page-width: 816px;
+	--page-height: 1056px;
+	--page-font-size: 16px;
+	width: 816px;
+	min-width: 816px;
+	max-width: 816px;
+	height: 1056px;
+	min-height: 1056px;
+	max-height: 1056px;
+}
+
 .printing .drag-img {
 	border-color: transparent;
 }
@@ -162,14 +174,8 @@ body {
 
 	<script type="text/javascript">
 		let gotResponse = false;
-
-		const opt = {
-			margin:       0,
-			filename:     'coversheet.pdf',
-			image:        { type: 'jpeg', quality: 1 },
-			html2canvas:  { scale: 1, scrollX: 0, scrollY: 0, windowWidth: document.documentElement.clientWidth },
-			jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
-		};
+		const EXPORT_WIDTH = 816;
+		const EXPORT_HEIGHT = 1056;
 
 		function updatePageDimensions() {
 			const pageWidth = document.documentElement.clientWidth;
@@ -181,6 +187,62 @@ body {
 
 		updatePageDimensions();
 		window.addEventListener('resize', updatePageDimensions);
+
+		async function withFixedExportLayout(render) {
+			const page = document.querySelector('#cshtml');
+			const pageRect = page.getBoundingClientRect();
+			const scale = EXPORT_WIDTH / pageRect.width;
+			const signatures = Array.from(document.querySelectorAll('.drag-img')).map(signature => ({
+				element: signature,
+				style: signature.getAttribute('style'),
+				rect: signature.getBoundingClientRect()
+			}));
+
+			document.body.classList.add('printing');
+			signatures.forEach(({ element, rect }) => {
+				element.style.position = 'absolute';
+				element.style.left = `${(rect.left - pageRect.left) * scale}px`;
+				element.style.top = `${(rect.top - pageRect.top) * scale}px`;
+				element.style.width = `${rect.width * scale}px`;
+				element.style.height = `${rect.height * scale}px`;
+				element.style.transform = 'none';
+			});
+
+			await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+
+			try {
+				return await render();
+			} finally {
+				document.body.classList.remove('printing');
+				signatures.forEach(({ element, style }) => {
+					if (style === null) element.removeAttribute('style');
+					else element.setAttribute('style', style);
+				});
+			}
+		}
+
+		function renderCoversheetCanvas(scale) {
+			return withFixedExportLayout(() => html2canvas(document.querySelector('#cshtml'), {
+				scale,
+				scrollX: 0,
+				scrollY: 0,
+				width: EXPORT_WIDTH,
+				height: EXPORT_HEIGHT,
+				windowWidth: EXPORT_WIDTH,
+				windowHeight: EXPORT_HEIGHT,
+				backgroundColor: '#ffffff',
+				logging: false,
+				useCORS: true
+			}));
+		}
+
+		async function renderCoversheetPDF() {
+			const canvas = await renderCoversheetCanvas(2);
+			const { jsPDF } = window.jspdf;
+			const pdf = new jsPDF({ unit: 'in', format: 'letter', orientation: 'portrait' });
+			pdf.addImage(canvas.toDataURL('image/jpeg', 1), 'JPEG', 0, 0, 8.5, 11, undefined, 'FAST');
+			return pdf.output('blob');
+		}
 
 		document.addEventListener('paste', async (e) => {
 			e.preventDefault();
@@ -330,15 +392,9 @@ body {
 				}
 			} else if(event.data.getCoversheetImage) {
 				document.body.scrollTop = 0;
-				document.body.classList.add('printing');
-				let data = await html2pdf().set({
-					margin:       0,
-					image:        { type: 'png', quality: 1 },
-					html2canvas:  { scale: 3, scrollX: 0, scrollY: 0, windowWidth: document.documentElement.clientWidth },
-					jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
-				}).from(document.body).outputImg('datauristring');
+				const canvas = await renderCoversheetCanvas(3);
+				const data = canvas.toDataURL('image/png');
 
-				document.body.classList.remove('printing');
 				let blob = dataURItoBlob(data);
 				// console.log(data, blob);
 				event.source.postMessage({
@@ -412,13 +468,11 @@ body {
 			} else if(event.data.getPDF) {
 				document.body.scrollTop = 0;
 				(async () => {
-					// New Promise-based usage:
-					document.body.classList.add('printing');
+					const pdf = await renderCoversheetPDF();
 					event.source.postMessage({
 						custom: true,
-						pdf: await html2pdf().set(opt).from(document.body).output('blob')
+						pdf
 					}, window.location.origin);
-					document.body.classList.remove('printing');
 				})();
 			} else if(event.data.state) {
 				updateCoversheetText(event.data.state);
