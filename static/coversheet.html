@@ -193,31 +193,35 @@ body.printing {
 			const pageRect = page.getBoundingClientRect();
 			const scale = EXPORT_WIDTH / pageRect.width;
 			const signatures = Array.from(document.querySelectorAll('.drag-img')).map(signature => ({
-				element: signature,
-				style: signature.getAttribute('style'),
-				rect: signature.getBoundingClientRect()
-			}));
+				rect: signature.getBoundingClientRect(),
+				src: signature.querySelector('img')?.src
+			})).filter(signature => signature.src);
 
 			document.body.classList.add('printing');
-			signatures.forEach(({ element, rect }) => {
-				element.style.position = 'absolute';
-				element.style.left = `${(rect.left - pageRect.left) * scale}px`;
-				element.style.top = `${(rect.top - pageRect.top) * scale}px`;
-				element.style.width = `${rect.width * scale}px`;
-				element.style.height = `${rect.height * scale}px`;
-				element.style.transform = 'none';
+			const exportSignatures = signatures.map(({ rect, src }) => {
+				const image = document.createElement('img');
+				image.src = src;
+				image.alt = '';
+				image.style.position = 'absolute';
+				image.style.left = `${(rect.left - pageRect.left) * scale}px`;
+				image.style.top = `${(rect.top - pageRect.top) * scale}px`;
+				image.style.width = `${rect.width * scale}px`;
+				image.style.height = `${rect.height * scale}px`;
+				image.style.zIndex = '10';
+				page.appendChild(image);
+				return image;
 			});
 
+			await Promise.all(exportSignatures.map(image =>
+				image.decode ? image.decode().catch(() => {}) : Promise.resolve()
+			));
 			await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
 
 			try {
 				return await render();
 			} finally {
+				exportSignatures.forEach(image => image.remove());
 				document.body.classList.remove('printing');
-				signatures.forEach(({ element, style }) => {
-					if (style === null) element.removeAttribute('style');
-					else element.setAttribute('style', style);
-				});
 			}
 		}
 
