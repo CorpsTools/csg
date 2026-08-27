@@ -1,5 +1,11 @@
 export default [
 	{
+		date: "27AUG2026",
+		changes: `
+# Fixed the coversheet layout when adding more than three cadet names.
+`
+	},
+	{
 		date: "16AUG2026",
 		changes: `
 # Updated the cover page and certification statements to comply with the June 2026 DAAW.

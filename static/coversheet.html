@@ -288,6 +288,7 @@ body.printing {
 
 		function updateCoversheetText(state) {
 			const isGroup = state.cadets.length > 1;
+			const cadetCount = state.cadets.length;
 			const subjectPronoun = isGroup ? 'We' : 'I';
 			const objectPronoun = isGroup ? 'we' : 'I';
 			const selectedInitials = state.initials.filter(Boolean).join(' ');
@@ -302,8 +303,17 @@ body.printing {
 				by: 53.0051, cadets: 56.4899, location: 59.9747, date: 63.4596,
 				used: 75.6566, unused: 80.8838, signature: 87.8535
 			};
+			const cadetLineStep = 1.7424;
+			if (isGroup && cadetCount >= 4) {
+				// Start larger groups higher and place the location after the last cadet.
+				// The previous fixed positions only left room for three cadet lines.
+				positions.by = 40.8081;
+				positions.cadets = 44.2929;
+				positions.location = Math.max(53.0051, positions.cadets + (cadetCount + 1) * cadetLineStep);
+				positions.date = positions.location + (2 * cadetLineStep);
+			}
 			const signatureRows = state.cadets.map((_, index) => `
-				<p class="cover-line signature-row" style="top:${positions.signature + index * 1.7424}%">
+				<p class="cover-line signature-row" style="top:${positions.signature + index * cadetLineStep}%">
 					<span>SIGNATURE:</span><span class="signature-line"></span><span>DATE:</span><span class="signature-date-line">${state.signatureDate || ''}</span>
 				</p>`).join('');
 			let csHTML = `
