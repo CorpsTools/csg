@@ -311,6 +311,11 @@ body.printing {
 				positions.cadets = 44.2929;
 				positions.location = Math.max(53.0051, positions.cadets + (cadetCount + 1) * cadetLineStep);
 				positions.date = positions.location + (2 * cadetLineStep);
+			} else if (isGroup && cadetCount === 3) {
+				// Preserve the standard three-person layout while leaving one line
+				// between the final cadet and the West Point location line.
+				positions.location += cadetLineStep;
+				positions.date += cadetLineStep;
 			}
 			const signatureRows = state.cadets.map((_, index) => `
 				<p class="cover-line signature-row" style="top:${positions.signature + index * cadetLineStep}%">
