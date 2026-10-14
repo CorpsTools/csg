@@ -1,5 +1,11 @@
 export default [
 	{
+		date: "14OCT2026",
+		changes: `
+# Changed all AI course-code prefixes to SI (including SI105X) to align with updated West Point Course Policy and President Trump's <a href="https://www.whitehouse.gov/presidential-actions/2026/09/inaugurating-the-era-of-super-intelligence/" target="_blank" rel="noopener noreferrer">Executive Order 14434, "Inaugurating the Era of Super Intelligence," signed September 29, 2026</a>.
+`
+	},
+	{
 		date: "27AUG2026",
 		changes: `
 # Fixed the coversheet layout when adding more than three cadet names.

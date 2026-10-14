@@ -7,7 +7,6 @@
 	// import html2pdf from 'html2pdf.js';
 	import AutoComplete from "simple-svelte-autocomplete";
 	import Coversheet from "./Coversheet.svelte";
-	import CorpsCard from "./CorpsCard.svelte";
 	import { COURSE_NAMES } from "../courses.js";
 	import CHANGELOG from "./CHANGELOG.js";
 	import { persistentStore } from "../stores/persistentStore.js";
@@ -738,6 +737,10 @@
 					target="_blank">Feedback</a
 				>
 			</p>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-8">
 			<div class="card wrapper-card">
 				<div class="card-body">
 					<Coversheet
@@ -748,8 +751,7 @@
 			</div>
 		</div>
 		<div class="col-md-4">
-			<CorpsCard />
-			<div class="card wrapper-card mt-3">
+			<div class="card wrapper-card">
 				<div class="card-body">
 					<div class="mb-1 course-input-wrap">
 						<AutoComplete
@@ -1067,7 +1069,7 @@ Jane Roe 26 D2"
 					with any issues, and I’ll try to get them sorted as soon as possible.
 				</p>
 				<p class="small text-muted mt-3 mb-0">
-					<strong>Update timestamp:</strong> 27 August 2026, 9:36 AM EDT
+					<strong>Update timestamp:</strong> 14 October 2026, 8:56 AM EDT
 				</p>
 			</div>
 			<div class="modal-footer">

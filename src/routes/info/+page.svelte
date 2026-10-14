@@ -62,7 +62,7 @@
 		<div class="card-body">
 			<p class="text-center">
 				Contact
-				<a href="mailto:korbin.deary@westpoint.edu">korbin.deary@westpoint.edu</a> for any questions,
+				<a href="mailto:salar.sheriff@westpoint.edu">salar.sheriff@westpoint.edu</a> for any questions,
 				comments or concerns.
 			</p>
 			<div class="accordion accordion-flush" id="qaAccordion">
